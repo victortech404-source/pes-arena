@@ -8,7 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
 function initApp() {
     initNavigation();
     initAnimations();
-    setupGlobalAuthListener(); // New Global Auth Check
+    setupGlobalAuthListener(); // Global Auth Check
+    setupRoleBasedNavigation(); // NEW: Setup role-based navigation clicks
 }
 
 // --- 1. Global Authentication & UI Sync ---
@@ -73,7 +74,7 @@ window.handleLogout = function() {
     }
 };
 
-// --- 2. Navigation Functionality (Restored to original) ---
+// --- 2. Navigation Functionality (Enhanced) ---
 function initNavigation() {
     const hamburger = document.getElementById('hamburger');
     const navMenu = document.querySelector('.nav-menu');
@@ -97,6 +98,107 @@ function initNavigation() {
             }
         });
     });
+
+    // Log current navigation structure for debugging
+    console.log('Navigation initialized with links:', 
+        Array.from(navLinks).map(l => l.getAttribute('href')).filter(Boolean));
+}
+
+// NEW: Setup role-based navigation click handlers
+function setupRoleBasedNavigation() {
+    // Management link click handler
+    const managementLink = document.getElementById('nav-management');
+    if (managementLink) {
+        // Remove any existing listeners by cloning and replacing
+        const newManagementLink = managementLink.cloneNode(true);
+        managementLink.parentNode.replaceChild(newManagementLink, managementLink);
+        
+        // Add new click listener
+        newManagementLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log('🔷 Navigating to: Management Page');
+            navigateToPage('management');
+        });
+        
+        console.log('Management navigation handler initialized');
+    }
+
+    // Boardroom link click handler
+    const boardroomLink = document.getElementById('nav-boardroom');
+    if (boardroomLink) {
+        // Remove any existing listeners by cloning and replacing
+        const newBoardroomLink = boardroomLink.cloneNode(true);
+        boardroomLink.parentNode.replaceChild(newBoardroomLink, boardroomLink);
+        
+        // Add new click listener
+        newBoardroomLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log('🛡️ Navigating to: Board Room');
+            navigateToPage('boardroom');
+        });
+        
+        console.log('Boardroom navigation handler initialized');
+    }
+
+    // Also handle direct clicks on the anchor tags inside
+    document.querySelectorAll('#nav-management a, #nav-boardroom a').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const page = link.closest('#nav-management') ? 'management' : 'boardroom';
+            console.log(`📱 Navigation via anchor: ${page}`);
+            navigateToPage(page);
+        });
+    });
+}
+
+// NEW: Centralized navigation function
+function navigateToPage(pageName) {
+    console.log(`🚀 Navigating to: ${pageName}`);
+    
+    // Define page configurations
+    const pages = {
+        'index': { url: 'index.html', title: 'Home - PES ARENA' },
+        'management': { url: 'management.html', title: 'My Tournaments - PES ARENA' },
+        'boardroom': { url: 'boardroom.html', title: 'Board Room - PES ARENA' },
+        'profile': { url: 'profile.html', title: 'My Profile - PES ARENA' },
+        'tournaments': { url: 'tournaments.html', title: 'Tournaments - PES ARENA' },
+        'leaderboard': { url: 'leaderboard.html', title: 'Leaderboard - PES ARENA' },
+        'about': { url: 'about.html', title: 'About - PES ARENA' },
+        'blog': { url: 'blog.html', title: 'News - PES ARENA' },
+        'community': { url: 'community.html', title: 'Community - PES ARENA' }
+    };
+
+    const pageConfig = pages[pageName];
+    
+    if (pageConfig) {
+        // Update browser title
+        document.title = pageConfig.title;
+        
+        // For now, use simple navigation
+        // In a more advanced SPA, you'd load content dynamically here
+        window.location.href = pageConfig.url;
+    } else {
+        console.error(`Unknown page: ${pageName}`);
+    }
+}
+
+// NEW: Function to check if current page matches navigation
+function updateActiveNavLink() {
+    const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+    console.log('Current page:', currentPath);
+    
+    // Remove active class from all nav links
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.classList.remove('active');
+    });
+    
+    // Add active class to matching link
+    document.querySelectorAll('.nav-link').forEach(link => {
+        const href = link.getAttribute('href');
+        if (href === currentPath) {
+            link.classList.add('active');
+        }
+    });
 }
 
 // --- 3. Animations (Existing) ---
@@ -118,3 +220,82 @@ function initAnimations() {
         observer.observe(el);
     });
 }
+
+// --- 4. Page Load Helper (for debugging) ---
+window.addEventListener('load', () => {
+    console.log('📍 Current location:', window.location.href);
+    updateActiveNavLink();
+    
+    // Verify that management and boardroom links exist if user has access
+    setTimeout(() => {
+        const managementLink = document.getElementById('nav-management');
+        const boardroomLink = document.getElementById('nav-boardroom');
+        
+        if (managementLink && managementLink.style.display !== 'none') {
+            console.log('✅ Management link is visible');
+        }
+        if (boardroomLink && boardroomLink.style.display !== 'none') {
+            console.log('✅ Boardroom link is visible');
+        }
+    }, 2000); // Check after 2 seconds when roles should be loaded
+});
+
+// --- 5. Optional: SPA-style loading (commented out - use if you want single-page app behavior) ---
+/*
+const loadPage = (pageName) => {
+    console.log(`📦 Loading page: ${pageName}`);
+    
+    const pages = {
+        'index': '/index.html',
+        'management': '/management.html',
+        'boardroom': '/boardroom.html',
+        'profile': '/profile.html'
+    };
+    
+    const url = pages[pageName];
+    if (!url) {
+        console.error(`No URL found for page: ${pageName}`);
+        return;
+    }
+    
+    // Show loading indicator
+    document.body.style.opacity = '0.5';
+    
+    fetch(url)
+        .then(response => response.text())
+        .then(html => {
+            // Parse the HTML
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            
+            // Extract main content (adjust selector as needed)
+            const mainContent = doc.querySelector('main') || doc.body;
+            
+            // Replace current content
+            const currentMain = document.querySelector('main') || document.body;
+            currentMain.innerHTML = mainContent.innerHTML;
+            
+            // Update title
+            document.title = doc.title;
+            
+            // Re-initialize necessary scripts
+            if (window.homeManager) {
+                window.homeManager.loadHomePageData();
+            }
+            
+            // Hide loading
+            document.body.style.opacity = '1';
+            
+            // Update active nav
+            updateActiveNavLink();
+            
+            console.log(`✅ Page ${pageName} loaded successfully`);
+        })
+        .catch(error => {
+            console.error(`Failed to load page ${pageName}:`, error);
+            document.body.style.opacity = '1';
+            // Fallback to traditional navigation
+            window.location.href = url;
+        });
+};
+*/
