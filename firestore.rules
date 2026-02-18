@@ -1,0 +1,124 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isSuperAdmin() {
+      return isAuthenticated() && request.auth.email == 'victortech404@gmail.com';
+    }
+    
+    function isOrganizer() {
+      return isAuthenticated() && 
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isOrganizer == true;
+    }
+    
+    function isTournamentOrganizer(tournamentId) {
+      return isAuthenticated() && 
+             get(/databases/$(database)/documents/tournaments/$(tournamentId)).data.organizerId == request.auth.uid;
+    }
+    
+    function isAdminOrOrganizer(tournamentId) {
+      return isSuperAdmin() || isTournamentOrganizer(tournamentId);
+    }
+    
+    // Users collection
+    match /users/{userId} {
+      allow read: if true; // Anyone can read user profiles
+      allow write: if isAuthenticated() && request.auth.uid == userId;
+      allow delete: if isSuperAdmin(); // Only super admin can delete users
+    }
+    
+    // Tournaments collection
+    match /tournaments/{tournamentId} {
+      // Anyone can read tournaments
+      allow read: if true;
+      
+      // Only organizers can create tournaments
+      allow create: if isAuthenticated() && isOrganizer();
+      
+      // Update rules based on field modifications
+      allow update: if isAuthenticated() && (
+        // Super admin can update anything
+        isSuperAdmin() ||
+        // Tournament organizer can update non-critical fields
+        (isTournamentOrganizer(tournamentId) && 
+         !request.resource.data.diff(resource.data).affectedKeys()
+           .hasAny(['isDeleted', 'createdBy', 'organizerId']))
+      );
+      
+      // Only super admin can delete tournaments
+      allow delete: if isSuperAdmin();
+    }
+    
+    // Matches collection
+    match /matches/{matchId} {
+      // Players can read their own matches
+      allow read: if isAuthenticated() && (
+        resource.data.userId == request.auth.uid ||
+        resource.data.opponentId == request.auth.uid ||
+        isSuperAdmin()
+      );
+      
+      // Players can create a match if their uid is in userId or opponentId
+      allow create: if isAuthenticated() && (
+        request.resource.data.userId == request.auth.uid ||
+        request.resource.data.opponentId == request.auth.uid
+      );
+      
+      // Update rules based on status changes
+      allow update: if isAuthenticated() && (
+        // Players can update their own matches (except status)
+        (resource.data.userId == request.auth.uid ||
+         resource.data.opponentId == request.auth.uid) &&
+        !request.resource.data.diff(resource.data).affectedKeys()
+          .hasAny(['status', 'approvedBy', 'approvedAt'])
+        ||
+        // Only admins or tournament organizers can approve matches
+        (request.resource.data.diff(resource.data).affectedKeys()
+          .hasAny(['status', 'approvedBy', 'approvedAt']) &&
+         (isSuperAdmin() || 
+          (resource.data.tournamentId != null && 
+           isTournamentOrganizer(resource.data.tournamentId))))
+      );
+      
+      // Only super admin can delete matches
+      allow delete: if isSuperAdmin();
+    }
+    
+    // Registrations collection
+    match /registrations/{registrationId} {
+      // Users can read their own registrations
+      allow read: if isAuthenticated() && (
+        resource.data.userId == request.auth.uid ||
+        isSuperAdmin()
+      );
+      
+      // A user can create a registration for themselves
+      allow create: if isAuthenticated() && 
+                     request.resource.data.userId == request.auth.uid;
+      
+      // Only the organizer of that specific tournament can update registration status
+      allow update: if isAuthenticated() && (
+        // Allow users to update their own registration info (but not status)
+        (resource.data.userId == request.auth.uid &&
+         !request.resource.data.diff(resource.data).affectedKeys()
+           .hasAny(['status', 'approvedBy', 'approvedAt']))
+        ||
+        // Allow tournament organizer to approve/reject registrations
+        (resource.data.tournamentId != null &&
+         isTournamentOrganizer(resource.data.tournamentId) &&
+         request.resource.data.diff(resource.data).affectedKeys()
+           .hasAny(['status', 'approvedBy', 'approvedAt']))
+        ||
+        // Super admin can do anything
+        isSuperAdmin()
+      );
+      
+      // Only super admin can delete registrations
+      allow delete: if isSuperAdmin();
+    }
+  }
+}

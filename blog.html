@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="UON Efootball News & Blog - Latest updates, tournament recaps, player interviews, and eFootball gaming tips."
+    />
+    <title>News & Updates - UON GRiD Hype Hub</title>
+
+    <link rel="stylesheet" href="css/variables.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+    <link rel="stylesheet" href="css/blog.css" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="nav-logo">
+          <div class="logo"></div>
+          <span class="logo-text">UON GRiD</span>
+        </div>
+
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <a href="index.html" class="nav-link">Home</a>
+          </li>
+          <li class="nav-item">
+            <a href="about.html" class="nav-link">About</a>
+          </li>
+          <li class="nav-item">
+            <a href="tournaments.html" class="nav-link">Tournaments</a>
+          </li>
+          <li class="nav-item">
+            <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+          </li>
+          <li class="nav-item">
+            <a href="blog.html" class="nav-link active">News</a>
+          </li>
+          <li class="nav-item">
+            <a href="community.html" class="nav-link">Community</a>
+          </li>
+          <li class="nav-item" id="nav-join-hub">
+            <a href="join.html" class="nav-link join-btn">Join Hub</a>
+          </li>
+          <li class="nav-item">
+            <a href="profile.html" class="nav-link">My Profile</a>
+          </li>
+        </ul>
+        <div class="nav-actions">
+          <button
+            class="dark-mode-toggle"
+            id="darkModeToggle"
+            aria-label="Toggle dark mode"
+          >
+            <span class="toggle-icon">🌙</span>
+          </button>
+          <div class="hamburger" id="hamburger">
+            <span class="bar"></span><span class="bar"></span
+            ><span class="bar"></span>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <section class="news-hero" id="featured-hero">
+      <img
+        class="hero-bg"
+        id="featured-image"
+        src="images/default-hero.jpg"
+        alt="Featured News Background"
+        onerror="this.style.display='none'"
+      />
+      <div class="hero-overlay"></div>
+      <div class="container">
+        <div class="hero-text">
+          <div class="featured-badge" id="featured-badge">LOADING...</div>
+          <h1 class="hero-title" id="featured-title">
+            Fetching Latest Updates...
+          </h1>
+          <p class="hero-excerpt" id="featured-excerpt">
+            The hub is preparing the latest news feed from the UON GRiD
+            community.
+          </p>
+          <div class="hero-meta" id="featured-meta">
+            <span id="featured-date"></span>
+            <span id="featured-author"></span>
+          </div>
+          <a
+            href="javascript:void(0)"
+            class="btn btn-primary"
+            id="featured-link"
+            onclick="window.newsManager.openModal(null)"
+            >Read Full Story →</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <section class="blog-main-content">
+      <div class="container">
+        <div class="category-filter-section">
+          <div class="section-header">
+            <h2 class="section-title">Latest Updates</h2>
+          </div>
+          <div class="filter-controls" id="category-filters">
+            <button class="filter-btn active" data-category="all">
+              All News
+            </button>
+          </div>
+        </div>
+
+        <div class="blog-layout">
+          <div class="articles-main">
+            <div class="news-grid" id="news-feed-container"></div>
+            <div class="load-more-container">
+              <button class="btn btn-outline" id="load-more-btn">
+                Load More Posts
+              </button>
+            </div>
+          </div>
+
+          <div class="blog-sidebar">
+            <div class="sidebar-widget archive-widget">
+              <h3 class="widget-title">📜 Season Archives</h3>
+              <div class="archive-list" id="archive-list">
+                <p style="color: #666; font-size: 0.9rem">No archives yet.</p>
+              </div>
+            </div>
+
+            <div class="sidebar-widget trending-widget">
+              <h3 class="widget-title">⭐ Top 10 Players</h3>
+              <div class="trending-list" id="trending-list">
+                <p style="color: #666; font-size: 0.9rem">Stats loading...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- News Detail Modal -->
+    <div id="news-modal" class="news-modal-overlay">
+      <div class="news-modal-content">
+        <button
+          class="modal-close-btn"
+          onclick="window.newsManager.closeModal()"
+        >
+          ×
+        </button>
+        <div class="modal-body">
+          <img
+            id="modal-image"
+            src=""
+            alt="News Image"
+            class="modal-hero-image"
+          />
+          <div class="modal-text-content">
+            <div class="modal-meta">
+              <span id="modal-category" class="category-badge">Category</span>
+              <span id="modal-date">Date</span>
+            </div>
+            <h2 id="modal-title">News Title</h2>
+            <p class="modal-author">By <span id="modal-author">Author</span></p>
+            <div id="modal-full-content" class="news-article-body"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-bottom">
+          <p>&copy; 2025 UON GRiD – Official News Hub</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-analytics-compat.js"></script>
+
+    <!-- Firebase Configuration -->
+    <script src="js/firebase-config.js"></script>
+
+    <!-- Application Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/blog.js"></script>
+  </body>
+</html>

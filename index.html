@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Empty favicon to prevent console errors -->
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+
+    <!-- Primary Meta Tags -->
+    <title>PES ARENA - Kenya's Premier eFootball Platform</title>
+    <meta
+      name="title"
+      content="PES ARENA - Kenya's Premier Competitive eFootball Platform"
+    />
+    <meta
+      name="description"
+      content="Kenya's premier competitive eFootball platform. Compete in national tournaments, view leaderboards, and connect with top eFootball gamers across the country."
+    />
+    <meta
+      name="keywords"
+      content="PES ARENA, eFootball Kenya, Competitive eFootball, Kenya Gaming, eFootball Tournaments, National eSports, Kenya eSports"
+    />
+    <meta name="author" content="PES ARENA" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://uon-efootball.web.app/" />
+    <meta
+      property="og:title"
+      content="PES ARENA - Kenya's Premier eFootball Platform"
+    />
+    <meta
+      property="og:description"
+      content="Kenya's premier competitive eFootball platform. Compete in national tournaments, view leaderboards, and connect with top eFootball gamers across the country."
+    />
+    <meta
+      property="og:image"
+      content="https://uon-efootball.web.app/images/og-social-cover.jpg"
+    />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://uon-efootball.web.app/" />
+    <meta
+      property="twitter:title"
+      content="PES ARENA - Kenya's Premier eFootball Platform"
+    />
+    <meta
+      property="twitter:description"
+      content="Kenya's premier competitive eFootball platform. Compete in national tournaments, view leaderboards, and connect with top eFootball gamers across the country."
+    />
+    <meta
+      property="twitter:image"
+      content="https://uon-efootball.web.app/images/og-social-cover.jpg"
+    />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://uon-efootball.web.app/" />
+
+    <!-- Favicon & App Icons -->
+    <!-- Commented out until actual favicon files are available -->
+    <!--
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png" />
+    -->
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/variables.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#00ff88" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="PES ARENA" />
+    <link rel="manifest" href="manifest.json" />
+
+    <!-- Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SportsOrganization",
+        "name": "PES ARENA",
+        "alternateName": "Kenya's Premier eFootball Platform",
+        "url": "https://uon-efootball.web.app/",
+        "logo": "https://uon-efootball.web.app/images/logo.png",
+        "description": "Kenya's premier competitive eFootball gaming platform."
+      }
+    </script>
+  </head>
+  <body>
+    <!-- Updated Splash Screen with Glitch Effect -->
+    <div id="app-splash-screen" class="splash-container">
+      <div class="splash-content">
+        <div class="logo-glitch-container">
+          <h1 class="glitch-text" data-text="PES ARENA">PES ARENA</h1>
+          <div class="scanline"></div>
+        </div>
+        
+        <div class="tagline-container">
+          <p class="typing-text">AUTHENTICATING ARENA CITIZEN...</p>
+        </div>
+
+        <div class="loader-bar">
+          <div class="loader-progress"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content (initially hidden) -->
+    <div id="main-content" style="display: none;">
+      <!-- Navigation -->
+      <nav class="navbar">
+        <div class="nav-container">
+          <div class="nav-logo">
+            <div class="logo"></div>
+            <span class="logo-text">PES ARENA</span>
+          </div>
+
+          <ul class="nav-menu">
+            <li class="nav-item">
+              <a href="index.html" class="nav-link active">Home</a>
+            </li>
+            <li class="nav-item">
+              <a href="about.html" class="nav-link">About</a>
+            </li>
+            <li class="nav-item">
+              <a href="tournaments.html" class="nav-link">Tournaments</a>
+            </li>
+            <li class="nav-item">
+              <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+            </li>
+            <li class="nav-item">
+              <a href="blog.html" class="nav-link">News</a>
+            </li>
+            <li class="nav-item">
+              <a href="community.html" class="nav-link">Community</a>
+            </li>
+            <li class="nav-item" id="nav-join-hub">
+              <a href="profile.html" class="nav-link join-btn">Join Arena</a>
+            </li>
+            <li class="nav-item">
+              <a href="profile.html" class="nav-link">My Profile</a>
+            </li>
+          </ul>
+
+          <div class="nav-actions">
+            <button
+              class="dark-mode-toggle"
+              id="darkModeToggle"
+              aria-label="Toggle dark mode"
+            >
+              <span class="toggle-icon">🌙</span>
+            </button>
+            <div class="hamburger" id="hamburger">
+              <span class="bar"></span>
+              <span class="bar"></span>
+              <span class="bar"></span>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Match of the Day Container -->
+      <section class="featured-match-section">
+        <div class="container">
+          <div id="featured-match-container">
+            <h2 class="section-title">🔥 Match of the Day</h2>
+            <div id="match-of-the-day-content">
+              <div class="skeleton-loader" style="height: 200px; margin-top: 20px;"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Stats Bar -->
+      <section class="stats-bar">
+        <div class="container">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-number" id="stat-total-players">500+</div>
+              <div class="stat-label">Arena Citizens</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="stat-matches-played">1.2k</div>
+              <div class="stat-label">Matches Played</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="stat-goals-scored">3.5k</div>
+              <div class="stat-label">Goals Scored</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="stat-active-tournaments">8</div>
+              <div class="stat-label">Live Arenas</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Top Players Section - Updated to Two Columns -->
+      <section class="top-players-section">
+        <div class="container">
+          <div class="rankings-wrapper" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+            <div class="ranking-column">
+              <h2 class="section-title">⚔️ Top 10 Best Attack</h2>
+              <div id="best-attack-container" class="rankings-list">
+                <div class="skeleton-loader" style="height: 300px;"></div>
+              </div>
+            </div>
+            
+            <div class="ranking-column">
+              <h2 class="section-title">🛡️ Top 10 Best Defence</h2>
+              <div id="best-defense-container" class="rankings-list">
+                <div class="skeleton-loader" style="height: 300px;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Recent Results -->
+      <section class="recent-results-section">
+        <div class="container">
+          <h2 class="section-title">⚽ Recent Results</h2>
+          <div id="recent-results-list" class="results-feed">
+            <div class="skeleton-loader" style="height: 80px; margin-bottom: 15px;"></div>
+            <div class="skeleton-loader" style="height: 80px; margin-bottom: 15px;"></div>
+            <div class="skeleton-loader" style="height: 80px; margin-bottom: 15px;"></div>
+            <div class="skeleton-loader" style="height: 80px;"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tournament Flow -->
+      <section class="tournament-flow-section">
+        <div class="container">
+          <h2 class="section-title">How It Works</h2>
+          <div class="flow-steps">
+            <div class="flow-step">
+              <div class="step-icon">📝</div>
+              <h4 class="step-title">Register</h4>
+              <p class="step-description">Sign up for tournaments</p>
+            </div>
+            <div class="flow-step">
+              <div class="step-icon">📅</div>
+              <h4 class="step-title">Get Fixtures</h4>
+              <p class="step-description">Receive match schedule</p>
+            </div>
+            <div class="flow-step">
+              <div class="step-icon">🎮</div>
+              <h4 class="step-title">Play</h4>
+              <p class="step-description">Compete against opponents</p>
+            </div>
+            <div class="flow-step">
+              <div class="step-icon">📤</div>
+              <h4 class="step-title">Submit</h4>
+              <p class="step-description">Report match results</p>
+            </div>
+            <div class="flow-step">
+              <div class="step-icon">🏆</div>
+              <h4 class="step-title">Climb</h4>
+              <p class="step-description">Rise up the leaderboard</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Community Block -->
+      <section class="community-section">
+        <div class="container">
+          <h2 class="section-title">Join the Community</h2>
+          <div class="community-buttons">
+            <a href="https://chat.whatsapp.com/FbtJPdiPtzFFDQqzcAz75A" class="btn btn-primary btn-large" target="_blank">
+              💬 WhatsApp Group
+            </a>
+            <a href="https://whatsapp.com/channel/0029VaXYZ123" class="btn btn-outline btn-large" target="_blank">
+              📢 WhatsApp Channel
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <div class="container">
+          <div class="footer-content">
+            <div class="footer-section">
+              <div class="footer-logo">
+                <div class="logo"></div>
+                <span class="logo-text">PES ARENA</span>
+              </div>
+              <p class="footer-description">
+                PES ARENA is Kenya's premier competitive eFootball platform, promoting digital gaming excellence and national competition through the PES ARENA ecosystem.
+              </p>
+              <div class="social-links">
+                <a href="#" class="social-link" aria-label="Instagram">📷</a>
+                <a href="#" class="social-link" aria-label="YouTube">🎥</a>
+                <a href="#" class="social-link" aria-label="Twitch">🔴</a>
+                <a href="#" class="social-link" aria-label="Twitter">🐦</a>
+                <a
+                  href="https://chat.whatsapp.com/FbtJPdiPtzFFDQqzcAz75A"
+                  class="social-link"
+                  aria-label="WhatsApp"
+                  >💬</a
+                >
+                <a href="#" class="social-link" aria-label="Discord">🎮</a>
+              </div>
+            </div>
+
+            <div class="footer-section">
+              <h3>Quick Links</h3>
+              <ul class="footer-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About PES ARENA</a></li>
+                <li><a href="tournaments.html">Tournaments</a></li>
+                <li><a href="leaderboard.html">Leaderboard</a></li>
+                <li><a href="blog.html">News & Blog</a></li>
+                <li><a href="profile.html">Join PES ARENA</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="contact.html#feedback">Feedback</a></li>
+              </ul>
+            </div>
+
+            <div class="footer-section">
+              <h3>Tournaments</h3>
+              <ul class="footer-links">
+                <li><a href="tournaments.html">Current Events</a></li>
+                <li>
+                  <a href="tournaments.html#calendar">Tournament Calendar</a>
+                </li>
+                <li><a href="tournaments.html#rules">Competition Rules</a></li>
+                <li><a href="leaderboard.html#rankings">Season Rankings</a></li>
+              </ul>
+            </div>
+
+            <div class="footer-section">
+              <h3>Support</h3>
+              <ul class="footer-links">
+                <li><a href="contact.html">Help Center</a></li>
+                <li><a href="community.html">Community Guidelines</a></li>
+                <li><a href="contact.html#feedback">Report Issue</a></li>
+                <li><a href="sponsors.html">Partnerships</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="footer-bottom">
+            <p>
+              &copy; 2025 PES ARENA – National eSports Infrastructure.
+            </p>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <!-- Scripts -->
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-analytics-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-messaging-compat.js"></script>
+
+    <script src="js/firebase-config.js"></script>
+    <script src="js/payments.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/home.js"></script>
+    <script src="js/splash.js"></script>
+    <script src="js/notifications.js"></script>
+
+    <!-- Service Worker Registration -->
+    <script>
+      // Register Service Worker
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker
+            .register('/sw.js')
+            .then((registration) => {
+              console.log(
+                'ServiceWorker registration successful with scope: ',
+                registration.scope
+              );
+            })
+            .catch((error) => {
+              console.log('ServiceWorker registration failed: ', error);
+            });
+        });
+      }
+
+      // Simple splash screen fade-out function that works with splash.js
+      function hideSplashScreen() {
+        const splashScreen = document.getElementById("app-splash-screen");
+        const mainContent = document.getElementById("main-content");
+        
+        if (splashScreen && mainContent) {
+          splashScreen.style.opacity = "0";
+          splashScreen.style.transition = "opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1)";
+          
+          setTimeout(() => {
+            splashScreen.style.display = "none";
+            mainContent.style.display = "block";
+            
+            // Ensure all images are loaded before any animations
+            const images = mainContent.querySelectorAll('img');
+            if (images.length > 0) {
+              Promise.all(Array.from(images).map(img => {
+                if (img.complete) return Promise.resolve();
+                return new Promise(resolve => {
+                  img.addEventListener('load', resolve);
+                  img.addEventListener('error', resolve);
+                });
+              })).then(() => {
+                // All images loaded, trigger any entrance animations
+                document.dispatchEvent(new CustomEvent('splash-hidden'));
+              });
+            } else {
+              document.dispatchEvent(new CustomEvent('splash-hidden'));
+            }
+          }, 800);
+        }
+      }
+
+      // Backup timer in case splash.js fails
+      setTimeout(() => {
+        const splashScreen = document.getElementById("app-splash-screen");
+        if (splashScreen && splashScreen.style.display !== 'none') {
+          hideSplashScreen();
+        }
+      }, 4000); // 4 second backup
+    </script>
+
+  </body>
+</html>

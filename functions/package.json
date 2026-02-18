@@ -1,0 +1,8 @@
+{
+  "name": "pes-arena-functions",
+  "version": "1.0.0",
+  "description": "Netlify functions for PES ARENA M-Pesa payments",
+  "dependencies": {
+    "axios": "^1.6.0"
+  }
+}

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Join UON GRiD - Registration</title>
+
+    <link rel="stylesheet" href="css/variables.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+      /* Responsive Layout Fixes */
+      .registration-container {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: var(--space-8);
+      }
+
+      @media (max-width: 900px) {
+        .registration-container {
+          grid-template-columns: 1fr;
+        }
+        /* Make benefits appear below form on mobile */
+        .registration-benefits {
+          margin-top: var(--space-8);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="nav-logo">
+          <div class="logo"></div>
+          <span class="logo-text">UON GRiD</span>
+        </div>
+
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <a href="index.html" class="nav-link">Home</a>
+          </li>
+          <li class="nav-item">
+            <a href="tournaments.html" class="nav-link">Tournaments</a>
+          </li>
+          <li class="nav-item">
+            <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+          </li>
+          <li class="nav-item" id="nav-join-hub">
+            <a href="join.html" class="nav-link active join-btn">Join Hub</a>
+          </li>
+          <li class="nav-item">
+            <a href="profile.html" class="nav-link">My Profile</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <section class="page-hero">
+      <div class="hero-content">
+        <h1 class="hero-title">
+          <span class="title-main">Join UON GRiD</span>
+          <span class="title-sub"
+            >Become Part of Kenya's Premier University Gaming Community</span
+          >
+        </h1>
+      </div>
+    </section>
+
+    <section
+      class="registration-section"
+      style="padding: var(--space-16) 0; background: var(--bg-secondary)"
+    >
+      <div class="container">
+        <div class="registration-container">
+          <div class="registration-form-container">
+            <h2
+              style="
+                text-align: center;
+                margin-bottom: var(--space-2);
+                color: var(--text-primary);
+              "
+            >
+              Create Your Account
+            </h2>
+            <p
+              style="
+                text-align: center;
+                color: var(--text-secondary);
+                margin-bottom: var(--space-8);
+              "
+            >
+              Fill in your details to join the UON Efootball community
+            </p>
+
+            <form class="registration-form" id="registration-form">
+              <div class="form-section">
+                <h3>Personal Information</h3>
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label for="full-name">Full Name *</label>
+                    <input
+                      type="text"
+                      id="full-name"
+                      name="full_name"
+                      required
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="uon-id">UON Student ID *</label>
+                    <input
+                      type="text"
+                      id="uon-id"
+                      name="uon_id"
+                      required
+                      placeholder="e.g., C123/4567/2023 or STA3/..."
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="faculty">Faculty *</label>
+                    <select id="faculty" name="faculty" required>
+                      <option value="" disabled selected>Select Faculty</option>
+                      <option value="Faculty of Agriculture">
+                        Faculty of Agriculture
+                      </option>
+                      <option value="Faculty of Arts & Social Sciences">
+                        Faculty of Arts & Social Sciences
+                      </option>
+                      <option value="Faculty of Built Environment & Design">
+                        Faculty of Built Environment & Design
+                      </option>
+                      <option value="Faculty of Business & Management Sciences">
+                        Faculty of Business & Management Sciences
+                      </option>
+                      <option value="Faculty of Education">
+                        Faculty of Education
+                      </option>
+                      <option value="Faculty of Engineering">
+                        Faculty of Engineering
+                      </option>
+                      <option value="Faculty of Health Sciences">
+                        Faculty of Health Sciences
+                      </option>
+                      <option value="Faculty of Law">Faculty of Law</option>
+                      <option value="Faculty of Science & Technology">
+                        Faculty of Science & Technology
+                      </option>
+                      <option value="Faculty of Veterinary Medicine">
+                        Faculty of Veterinary Medicine
+                      </option>
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      placeholder="+254 7XX XXX XXX"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      required
+                      placeholder="email@example.com"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-section">
+                <h3>Gaming Profile</h3>
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label for="gamer-tag">Gamer Tag *</label>
+                    <input
+                      type="text"
+                      id="gamer-tag"
+                      name="gamer_tag"
+                      required
+                      placeholder="Your in-game name"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="platform">Primary Platform *</label>
+                    <select id="platform" name="platform" required>
+                      <option value="">Select Platform</option>
+                      <option value="Mobile">Mobile</option>
+                      <option value="Console">Console (PS/Xbox)</option>
+                      <option value="PC">PC</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="team-strength">Team Strength</label>
+                    <input
+                      type="number"
+                      id="team-strength"
+                      name="team_strength"
+                      placeholder="e.g., 3150"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="skill-level">Skill Level</label>
+                    <select id="skill-level" name="skill_level">
+                      <option value="beginner">Beginner</option>
+                      <option value="intermediate">Intermediate</option>
+                      <option value="advanced">Advanced</option>
+                      <option value="expert">Expert</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-section">
+                <h3>Account Settings</h3>
+                <div class="form-group">
+                  <label for="password">Password *</label>
+                  <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    required
+                    minlength="8"
+                    autocomplete="new-password"
+                  />
+                  <div
+                    style="
+                      font-size: var(--text-sm);
+                      color: var(--text-muted);
+                      margin-top: var(--space-1);
+                    "
+                  >
+                    Password must be at least 8 characters long
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="confirm-password">Confirm Password *</label>
+                  <input
+                    type="password"
+                    id="confirm-password"
+                    name="confirm_password"
+                    required
+                    autocomplete="new-password"
+                  />
+                </div>
+              </div>
+
+              <div class="form-section">
+                <div class="form-checkbox">
+                  <input
+                    type="checkbox"
+                    id="newsletter"
+                    name="newsletter"
+                    checked
+                  />
+                  <label for="newsletter">Subscribe to newsletter</label>
+                </div>
+                <div class="form-checkbox">
+                  <input type="checkbox" id="terms" name="terms" required />
+                  <label for="terms">I agree to the Terms & Conditions *</label>
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button
+                  type="submit"
+                  class="btn btn-primary btn-large"
+                  id="submit-btn"
+                >
+                  Create Account
+                </button>
+                <p class="login-link">
+                  Already have an account?
+                  <a href="login.html" style="color: var(--primary-green)"
+                    >Sign in here</a
+                  >
+                </p>
+              </div>
+            </form>
+          </div>
+
+          <div class="registration-benefits">
+            <h3
+              style="color: var(--text-primary); margin-bottom: var(--space-6)"
+            >
+              Why Join UON GRiD?
+            </h3>
+            <div class="benefits-list">
+              <div class="benefit-item">
+                <div class="benefit-icon">🏆</div>
+                <div class="benefit-content">
+                  <h4>Compete in Tournaments</h4>
+                  <p>Join official UON eFootball tournaments</p>
+                </div>
+              </div>
+              <div class="benefit-item">
+                <div class="benefit-icon">📊</div>
+                <div class="benefit-content">
+                  <h4>Track Your Progress</h4>
+                  <p>Monitor your stats and rankings</p>
+                </div>
+              </div>
+              <div class="benefit-item">
+                <div class="benefit-icon">👥</div>
+                <div class="benefit-content">
+                  <h4>Connect with Players</h4>
+                  <p>Join a community of 500+ enthusiasts</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-bottom">
+          <p>
+            &copy; 2025 UON GRiD – Powered by University of Nairobi eSports.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
+    <script src="js/firebase-config.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/join.js"></script>
+  </body>
+</html>

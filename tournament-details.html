@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tournament Details - PES ARENA</title>
+    <link rel="stylesheet" href="css/variables.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+      .tournament-hero {
+        background: linear-gradient(
+          135deg,
+          var(--bg-secondary) 0%,
+          var(--bg-tertiary) 100%
+        );
+        padding: 40px 0;
+        border-bottom: 2px solid var(--primary-green);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .tournament-hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(0,255,136,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+        opacity: 0.3;
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 2;
+      }
+
+      .tournament-meta {
+        display: flex;
+        gap: 20px;
+        margin-top: 15px;
+        flex-wrap: wrap;
+      }
+
+      .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+      }
+
+      .meta-item i {
+        color: var(--primary-green);
+        font-style: normal;
+      }
+
+      .status-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: var(--bg-secondary);
+        padding: 25px;
+        border-radius: 16px;
+        margin-bottom: 30px;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .registration-info h3 {
+        margin: 0 0 8px 0;
+        color: var(--text-primary);
+        font-size: 1.3rem;
+      }
+
+      .registration-stats {
+        display: flex;
+        gap: 25px;
+        align-items: center;
+      }
+
+      .stat-item {
+        text-align: center;
+      }
+
+      .stat-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--primary-green);
+        display: block;
+      }
+
+      .stat-label {
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .details-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        margin-bottom: 30px;
+      }
+
+      .info-card {
+        background: var(--bg-tertiary);
+        padding: 30px;
+        border-radius: 20px;
+        border: 1px solid var(--border-color);
+        height: fit-content;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .info-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+      }
+
+      .card-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid var(--primary-green);
+      }
+
+      .card-icon {
+        width: 40px;
+        height: 40px;
+        background: var(--primary-green);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+      }
+
+      .info-grid {
+        display: grid;
+        gap: 20px;
+      }
+
+      .info-item {
+        display: grid;
+        gap: 5px;
+      }
+
+      .info-label {
+        color: var(--text-secondary);
+        font-size: 0.85rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .info-value {
+        color: var(--text-primary);
+        font-size: 1.1rem;
+        font-weight: 600;
+        line-height: 1.4;
+      }
+
+      .prize-highlight {
+        color: var(--gold) !important;
+        font-size: 1.3rem !important;
+        font-weight: 700 !important;
+      }
+
+      .entry-fee {
+        color: #ff6b6b !important;
+        font-size: 1.3rem !important;
+        font-weight: 700 !important;
+      }
+
+      .free-entry {
+        color: var(--primary-green) !important;
+        font-size: 1.3rem !important;
+        font-weight: 700 !important;
+      }
+
+      .rules-section {
+        margin-bottom: 25px;
+      }
+
+      .rules-section:last-child {
+        margin-bottom: 0;
+      }
+
+      .rules-title {
+        color: var(--primary-green);
+        font-size: 1.1rem;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .rules-content {
+        background: var(--bg-secondary);
+        padding: 20px;
+        border-radius: 12px;
+        border-left: 4px solid var(--primary-green);
+        color: var(--text-primary);
+        line-height: 1.6;
+        white-space: pre-line;
+        font-size: 0.95rem;
+      }
+
+      .participants-section {
+        background: var(--bg-tertiary);
+        padding: 30px;
+        border-radius: 20px;
+        border: 1px solid var(--border-color);
+      }
+
+      .participants-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+      }
+
+      .participant-card {
+        background: var(--bg-secondary);
+        padding: 20px;
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .participant-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: var(--primary-green);
+      }
+
+      .participant-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .participant-name {
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 5px;
+        font-size: 1.1rem;
+      }
+
+      .participant-gamertag {
+        color: var(--primary-green);
+        font-size: 0.9rem;
+        margin-bottom: 8px;
+      }
+
+      .participant-institution {
+        color: var(--text-secondary);
+        font-size: 0.85rem;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .match-result {
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px dashed var(--border-color);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .match-score {
+        font-weight: 600;
+        color: var(--primary-green);
+      }
+
+      .dispute-link {
+        color: #ff6b6b;
+        font-size: 0.8rem;
+        text-decoration: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .dispute-link:hover {
+        color: #ff4444;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--text-secondary);
+        grid-column: 1 / -1;
+      }
+
+      .empty-state i {
+        font-size: 3rem;
+        margin-bottom: 15px;
+        display: block;
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: 15px;
+        margin-top: 10px;
+        flex-wrap: wrap;
+      }
+
+      .btn-report {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+
+      .btn-report:hover {
+        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+      }
+
+      /* Custom modal styles */
+      .custom-modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.95);
+        z-index: 10000;
+        align-items: center;
+        justify-content: center;
+        display: none;
+        backdrop-filter: blur(5px);
+      }
+
+      .custom-modal-overlay.active {
+        display: flex;
+      }
+
+      .modal-content {
+        background: var(--bg-tertiary);
+        border: 2px solid var(--primary-green);
+        border-radius: 20px;
+        padding: 30px;
+        width: 90%;
+        max-width: 500px;
+        box-shadow: 0 10px 40px rgba(0, 255, 136, 0.2);
+        animation: modalSlideIn 0.3s ease;
+      }
+
+      @keyframes modalSlideIn {
+        from {
+          transform: translateY(-50px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      .modal-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid var(--primary-green);
+      }
+
+      .modal-icon {
+        width: 50px;
+        height: 50px;
+        background: var(--primary-green);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+      }
+
+      .modal-title {
+        color: var(--primary-green);
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 0;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--text-primary);
+        font-weight: 500;
+      }
+
+      .form-select, .form-input {
+        width: 100%;
+        padding: 12px 15px;
+        background: var(--bg-secondary);
+        border: 2px solid var(--border-color);
+        border-radius: 10px;
+        color: var(--text-primary);
+        font-size: 1rem;
+        transition: all 0.3s ease;
+      }
+
+      .form-select:focus, .form-input:focus {
+        outline: none;
+        border-color: var(--primary-green);
+        box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+      }
+
+      .form-select option {
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+      }
+
+      .score-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+      }
+
+      .warning-text {
+        background: rgba(255, 107, 107, 0.1);
+        border-left: 4px solid #ff6b6b;
+        padding: 15px;
+        margin: 20px 0;
+        color: #ff6b6b;
+        font-size: 0.9rem;
+        border-radius: 8px;
+      }
+
+      .modal-actions {
+        display: flex;
+        gap: 15px;
+        margin-top: 25px;
+      }
+
+      .modal-actions .btn {
+        flex: 1;
+      }
+
+      @media (max-width: 768px) {
+        .details-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .status-header {
+          flex-direction: column;
+          gap: 20px;
+          text-align: center;
+        }
+
+        .registration-stats {
+          justify-content: center;
+        }
+
+        .participants-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .action-buttons {
+          flex-direction: column;
+        }
+
+        .tournament-meta {
+          justify-content: center;
+        }
+
+        .modal-actions {
+          flex-direction: column;
+        }
+
+        .score-row {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .info-card {
+          padding: 20px;
+        }
+
+        .participants-section {
+          padding: 20px;
+        }
+
+        .registration-stats {
+          flex-direction: column;
+          gap: 15px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="nav-logo">
+          <div class="logo"></div>
+          <span class="logo-text">PES ARENA</span>
+        </div>
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <a href="index.html" class="nav-link">Home</a>
+          </li>
+          <li class="nav-item">
+            <a href="tournaments.html" class="nav-link">Tournaments</a>
+          </li>
+          <li class="nav-item">
+            <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+          </li>
+          <li class="nav-item">
+            <a href="profile.html" class="nav-link">My Profile</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <section class="tournament-hero">
+      <div class="container">
+        <div class="hero-content">
+          <h1 class="hero-title" id="t-title">Loading Tournament...</h1>
+          <div class="tournament-meta">
+            <div class="meta-item">
+              <i>📅</i> <span id="t-date">Loading date...</span>
+            </div>
+            <div class="meta-item">
+              <i>🎮</i> <span id="t-platform">Loading platform...</span>
+            </div>
+            <div class="meta-item">
+              <i>🏆</i> <span id="t-format-title">Loading format...</span>
+            </div>
+          </div>
+          <div
+            id="t-status-badge"
+            class="tournament-status live"
+            style="margin-top: 15px"
+          >
+            Loading status...
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="live-widget-section">
+      <div class="container">
+        <!-- Registration Status Header -->
+        <div class="status-header">
+          <div class="registration-info">
+            <h3>Tournament Registration</h3>
+            <div class="registration-stats">
+              <div class="stat-item">
+                <span class="stat-value" id="t-participants-count">0/0</span>
+                <span class="stat-label">Confirmed Players</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value" id="t-available-slots">0</span>
+                <span class="stat-label">Available Slots</span>
+              </div>
+            </div>
+          </div>
+          <div class="action-buttons">
+            <button id="detail-join-btn" class="btn btn-primary">
+              🎮 Request to Join
+            </button>
+            <button id="report-score-btn" class="btn btn-report" style="display: none;">
+              📝 Report Score
+            </button>
+            <button
+              id="view-bracket-btn"
+              class="btn btn-outline"
+              style="display: none"
+            >
+              📊 View Bracket
+            </button>
+          </div>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="details-grid">
+          <!-- Tournament Information -->
+          <div class="info-card">
+            <div class="card-header">
+              <div class="card-icon">ℹ️</div>
+              <h3 style="color: var(--primary-green); margin: 0">
+                Tournament Information
+              </h3>
+            </div>
+            <div class="info-grid">
+              <div class="info-item">
+                <span class="info-label">Description</span>
+                <span class="info-value" id="t-desc"
+                  >Loading description...</span
+                >
+              </div>
+              <div class="info-item">
+                <span class="info-label">Platform</span>
+                <span class="info-value" id="t-platform-full"
+                  >Loading platform...</span
+                >
+              </div>
+              <div class="info-item">
+                <span class="info-label">Entry Fee</span>
+                <span class="info-value" id="t-entry-fee"
+                  >Loading entry fee...</span
+                >
+              </div>
+              <div class="info-item">
+                <span class="info-label">Prize Pool</span>
+                <span class="info-value prize-highlight" id="t-prize"
+                  >Loading prize...</span
+                >
+              </div>
+              <div class="info-item">
+                <span class="info-label">Start Date & Time</span>
+                <span class="info-value" id="t-full-date"
+                  >Loading date and time...</span
+                >
+              </div>
+              <div class="info-item">
+                <span class="info-label">Tournament Format</span>
+                <span class="info-value" id="t-format-desc"
+                  >Loading format details...</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Rules & Regulations -->
+          <div class="info-card">
+            <div class="card-header">
+              <div class="card-icon">📋</div>
+              <h3 style="color: var(--primary-green); margin: 0">
+                Rules & Regulations
+              </h3>
+            </div>
+            <div class="rules-section">
+              <div class="rules-title">📊 Format Details</div>
+              <div class="rules-content" id="t-format-details">
+                Loading format details...
+              </div>
+            </div>
+            <div class="rules-section">
+              <div class="rules-title">⚽ Match Rules</div>
+              <div class="rules-content" id="t-rules">
+                Loading match rules...
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Registered Players Section -->
+        <div class="participants-section">
+          <div class="card-header">
+            <div class="card-icon">👥</div>
+            <h3 style="color: var(--primary-green); margin: 0">
+              Arena Challengers
+            </h3>
+          </div>
+          <div class="participants-grid" id="participants-list-container">
+            <div class="empty-state">
+              <i>👤</i>
+              <h4>No Arena Challengers Yet</h4>
+              <p>Be the first to conquer the arena!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-bottom">
+          <p>&copy; 2025 PES ARENA - National eSports Infrastructure</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- M-Pesa Payment Modal -->
+    <div id="payment-modal" class="custom-modal-overlay">
+      <div class="info-card" style="width:90%; max-width:400px; text-align:center;">
+        <h3 style="color:var(--primary-green);">M-Pesa Payment</h3>
+        <p>Enter your M-Pesa number to pay <span id="pay-amount" class="prize-highlight"></span></p>
+        <input type="text" id="mpesa-phone" placeholder="2547XXXXXXXX" class="admin-input-field" style="margin:20px 0; width:100%; padding:12px; background:#111; border:1px solid #333; color:white;">
+        <div class="action-buttons">
+          <button onclick="processArenaPayment()" class="btn btn-primary" style="width:100%;">Pay Now</button>
+          <button onclick="document.getElementById('payment-modal').style.display='none'" class="btn btn-outline" style="width:100%;">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Score Report Modal -->
+    <div id="score-report-modal" class="custom-modal-overlay">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-icon">📝</div>
+          <h3 class="modal-title">Report Match Score</h3>
+        </div>
+        
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="opponent-select">Select Opponent</label>
+            <select id="opponent-select" class="form-select" required>
+              <option value="">Choose your opponent...</option>
+            </select>
+          </div>
+
+          <div class="score-row">
+            <div class="form-group">
+              <label class="form-label" for="your-score">Your Score</label>
+              <input type="number" id="your-score" class="form-input" min="0" max="99" placeholder="0" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="opponent-score">Opponent Score</label>
+              <input type="number" id="opponent-score" class="form-input" min="0" max="99" placeholder="0" required>
+            </div>
+          </div>
+
+          <div class="warning-text">
+            <strong>⚠️ Warning:</strong> False reporting may lead to a permanent PES ARENA ban. All reports are reviewed by tournament administrators.
+          </div>
+
+          <div class="modal-actions">
+            <button onclick="submitScoreReport()" class="btn btn-primary">Submit Report</button>
+            <button onclick="closeScoreReportModal()" class="btn btn-outline">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dispute Modal -->
+    <div id="dispute-modal" class="custom-modal-overlay">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-icon">⚖️</div>
+          <h3 class="modal-title">Dispute Match Result</h3>
+        </div>
+        
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="dispute-match">Match Details</label>
+            <input type="text" id="dispute-match" class="form-input" readonly>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="dispute-reason">Reason for Dispute</label>
+            <textarea id="dispute-reason" class="form-input" rows="4" placeholder="Please explain why you're disputing this result..." required></textarea>
+          </div>
+
+          <div class="warning-text">
+            <strong>⚠️ Important:</strong> Disputes are reviewed by tournament admins. Providing evidence (screenshots/videos) in the description helps resolve disputes faster.
+          </div>
+
+          <div class="modal-actions">
+            <button onclick="submitDispute()" class="btn btn-primary">Submit Dispute</button>
+            <button onclick="closeDisputeModal()" class="btn btn-outline">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/payments.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/tournaments.js"></script>
+    <script src="js/tournament-details.js"></script>
+  </body>
+</html>

@@ -1,0 +1,299 @@
+/* Mobile Navigation */
+@media (max-width: 768px) {
+    /* Add CSS to hide install button in mobile navigation */
+    #install-pwa-container,
+    #pwa-install-btn,
+    .install-prompt {
+        display: none !important;
+    }
+    
+    /* Correct Mobile Menu Styles for Slide-in Effect */
+    .nav-menu {
+        position: fixed;
+        top: 80px; 
+        left: 0;
+        width: 80%; 
+        height: calc(100vh - 80px);
+        background: var(--bg-secondary);
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        padding: var(--space-8) 0;
+        gap: var(--space-6);
+        /* CHANGE 1: Use 'all' for transition to cover transform and opacity */
+        transition: all var(--transition-normal); 
+        border-right: 1px solid rgba(0, 255, 136, 0.1);
+        backdrop-filter: blur(20px);
+        z-index: 10000; /* Increased z-index to sit on top of everything */
+        /* Initial state: pushed off screen */
+        transform: translateX(-100%); 
+        /* CHANGE 2: Ensure visual invisibility */
+        opacity: 0;
+        display: flex; 
+    }
+    
+    .nav-menu.active {
+        transform: translateX(0); 
+        /* CHANGE 3: Ensure visual visibility */
+        opacity: 1;
+    }
+    
+    .nav-link {
+        font-size: var(--text-lg);
+        padding: var(--space-3) var(--space-6);
+        width: 80%;
+        text-align: center;
+    }
+    
+    .hamburger {
+        display: flex; /* Show hamburger icon on mobile */
+        flex-direction: column;
+        cursor: pointer;
+        gap: 4px;
+    }
+    
+    .bar {
+        width: 25px;
+        height: 3px;
+        background: var(--text-primary);
+        border-radius: var(--radius-sm);
+        transition: var(--transition-normal);
+    }
+    
+    /* Hamburger Active X icon */
+    .hamburger.active .bar:nth-child(1) {
+        transform: rotate(45deg) translate(6px, 6px);
+    }
+    
+    .hamburger.active .bar:nth-child(2) {
+        opacity: 0;
+    }
+    
+    .hamburger.active .bar:nth-child(3) {
+        transform: rotate(-45deg) translate(6px, -6px);
+    }
+
+    /* Prevent body scrolling when menu is open */
+    body.menu-open {
+        overflow: hidden;
+    }
+    
+    .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: var(--space-4);
+    }
+}
+
+/* Tablet and Small Desktop Improvements */
+@media (max-width: 991px) {
+    .hero-title {
+        font-size: var(--text-3xl);
+    }
+    
+    .title-sub {
+        font-size: var(--text-xl);
+    }
+    
+    .hero-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .btn {
+        width: 200px;
+        justify-content: center;
+    }
+    
+    .player-card {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: var(--space-6);
+    }
+    
+    .player-stats {
+        justify-content: center;
+    }
+    
+    .player-achievements {
+        justify-content: center;
+    }
+    
+    .footer-content {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-8);
+    }
+}
+
+/* Mobile Landscape Improvements */
+@media (max-width: 767px) {
+    :root {
+        --text-5xl: 2.5rem;
+        --text-4xl: 2rem;
+        --text-3xl: 1.75rem;
+        --text-2xl: 1.5rem;
+        --text-xl: 1.25rem;
+    }
+    
+    .container {
+        padding: 0 var(--space-4);
+    }
+    
+    .hero-title {
+        font-size: var(--text-3xl);
+    }
+    
+    .hero-description {
+        font-size: var(--text-lg);
+    }
+    
+    .section-title {
+        font-size: var(--text-2xl);
+    }
+    
+    .widget-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-6);
+    }
+    
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: var(--space-6);
+    }
+    
+    .footer-section {
+        text-align: center;
+    }
+    
+    /* Responsive adjustments for loading states */
+    .leaderboard-loading {
+        padding: 40px 20px;
+        min-height: 300px;
+    }
+    
+    .loading-spinner.large {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .loading-text {
+        font-size: 16px;
+    }
+}
+
+/* Mobile Portrait Improvements */
+@media (max-width: 575px) {
+    .container {
+        padding: 0 var(--space-3);
+    }
+    
+    .hero-title {
+        font-size: var(--text-2xl);
+    }
+    
+    .title-sub {
+        font-size: var(--text-lg);
+    }
+    
+    .hero-description {
+        font-size: var(--text-base);
+    }
+    
+    .btn {
+        padding: var(--space-3) var(--space-6);
+        font-size: var(--text-base);
+        width: 100%;
+        max-width: 280px;
+    }
+    
+    .ticker-item {
+        flex-direction: column;
+        gap: var(--space-2);
+    }
+    
+    .player-card {
+        padding: var(--space-4);
+    }
+    
+    .player-name {
+        font-size: var(--text-2xl);
+    }
+    
+    /* Form improvements for mobile */
+    .registration-form {
+        padding: var(--space-4);
+    }
+    
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .benefit-item {
+        flex-direction: column;
+        text-align: center;
+        gap: var(--space-3);
+    }
+    
+    .steps-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Small Mobile Devices & Tecno Pop 9 Specific Fixes */
+@media (max-width: 360px) {
+    /* Safe area fixes for smaller screens */
+    .navbar {
+        height: auto !important;
+        min-height: 60px;
+        padding: var(--space-2) 0;
+    }
+    
+    .logo-text {
+        font-size: var(--text-lg) !important;
+    }
+    
+    /* Force nav-menu to use full width on very small screens */
+    .nav-menu {
+        width: 100% !important;
+        border-right: none;
+    }
+    
+    .nav-link {
+        width: 90%;
+        padding: var(--space-3) var(--space-4);
+    }
+    
+    /* Ensure inputs don't overflow on narrow screens */
+    input, 
+    textarea,
+    select {
+        box-sizing: border-box !important;
+        max-width: 100%;
+    }
+    
+    /* Prevent hero section from hiding under navbar */
+    .hero {
+        padding-top: 120px !important;
+    }
+    
+    /* Additional small screen adjustments */
+    .hero-title {
+        font-size: var(--text-xl);
+        line-height: 1.2;
+    }
+    
+    .hero-description {
+        font-size: var(--text-sm);
+    }
+    
+    .btn {
+        padding: var(--space-2) var(--space-4);
+        font-size: var(--text-sm);
+    }
+    
+    /* Ensure proper spacing on very small screens */
+    .container {
+        padding-left: var(--space-2);
+        padding-right: var(--space-2);
+    }
+}

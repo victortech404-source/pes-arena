@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="UON Champions League - Register for the biggest eFootball tournament at University of Nairobi"
+    />
+    <title>UON Champions League - UON Efootball Hub</title>
+
+    <!-- SweetAlert2 for user alerts -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/variables.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+
+    <!-- Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="nav-logo">
+          <div class="logo"></div>
+          <span class="logo-text">UON Efootball Hub</span>
+        </div>
+
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <a href="index.html" class="nav-link">Home</a>
+          </li>
+          <li class="nav-item">
+            <a href="about.html" class="nav-link">About</a>
+          </li>
+          <li class="nav-item">
+            <a href="tournaments.html" class="nav-link active">Tournaments</a>
+          </li>
+          <li class="nav-item">
+            <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+          </li>
+          <li class="nav-item">
+            <a href="blog.html" class="nav-link">News</a>
+          </li>
+          <li class="nav-item">
+            <a href="community.html" class="nav-link">Community</a>
+          </li>
+          <li class="nav-item" id="nav-join-hub">
+            <a href="join.html" class="nav-link join-btn">Join Hub</a>
+          </li>
+          <li class="nav-item">
+            <a href="profile.html" class="nav-link">My Profile</a>
+          </li>
+        </ul>
+
+        <div class="nav-actions">
+          <button
+            class="dark-mode-toggle"
+            id="darkModeToggle"
+            aria-label="Toggle dark mode"
+          >
+            <span class="toggle-icon">🌙</span>
+          </button>
+          <div class="hamburger" id="hamburger">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Tournaments Hero -->
+    <section class="page-hero">
+      <div class="hero-content">
+        <h1 class="hero-title">
+          <span class="title-main">UON Champions League</span>
+          <span class="title-sub">The Ultimate eFootball Championship</span>
+        </h1>
+      </div>
+    </section>
+
+    <!-- Dynamic Tournaments List -->
+    <section class="live-widget-section" id="tournaments-list">
+      <div class="container">
+        <h2 class="section-title">Active & Upcoming Tournaments</h2>
+        <div class="tournament-cards" id="tournaments-container">
+          <p style="text-align: center; color: var(--text-secondary)">
+            Loading tournaments...
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tournament Rules -->
+    <section class="featured-player-section">
+      <div class="container">
+        <h2 class="section-title">Tournament Rules & Format</h2>
+        <div
+          class="rules-container"
+          style="
+            background: var(--bg-tertiary);
+            padding: var(--space-6);
+            border-radius: var(--radius-xl);
+          "
+        >
+          <div class="rules-grid" style="display: grid; gap: var(--space-6)">
+            <div class="rule-category">
+              <h3
+                style="
+                  color: var(--primary-green);
+                  margin-bottom: var(--space-3);
+                "
+              >
+                ✅ How to Register
+              </h3>
+              <ul
+                style="
+                  color: var(--text-secondary);
+                  line-height: 1.6;
+                  padding-left: var(--space-4);
+                "
+              >
+                <li>Create account on UON Efootball Hub</li>
+                <li>Click "Apply for Registration" above</li>
+                <li>Wait for admin approval</li>
+                <li>Check your email for confirmation</li>
+                <li>Join tournament WhatsApp group for updates</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How to Submit Results -->
+    <section class="live-widget-section">
+      <div class="container">
+        <h2 class="section-title">Submit Match Results</h2>
+        <div
+          class="results-guide"
+          style="
+            background: var(--bg-tertiary);
+            padding: var(--space-6);
+            border-radius: var(--radius-xl);
+          "
+        >
+          <div style="text-align: center; margin-bottom: var(--space-6)">
+            <div style="font-size: 3rem; margin-bottom: var(--space-3)">📸</div>
+            <h3
+              style="color: var(--text-primary); margin-bottom: var(--space-3)"
+            >
+              How to Report Your Match Results
+            </h3>
+          </div>
+
+          <div
+            class="results-steps"
+            style="
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+              gap: var(--space-6);
+            "
+          >
+            <div class="step" style="text-align: center">
+              <div
+                class="step-number"
+                style="
+                  background: var(--gradient-primary);
+                  color: var(--black);
+                  width: 40px;
+                  height: 40px;
+                  border-radius: 50%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  font-weight: 700;
+                  margin: 0 auto var(--space-3);
+                "
+              >
+                1
+              </div>
+              <h4
+                style="
+                  color: var(--text-primary);
+                  margin-bottom: var(--space-2);
+                "
+              >
+                Play Your Match
+              </h4>
+              <p style="color: var(--text-secondary)">
+                Schedule and play your match with your opponent
+              </p>
+            </div>
+
+            <div class="step" style="text-align: center">
+              <div
+                class="step-number"
+                style="
+                  background: var(--gradient-primary);
+                  color: var(--black);
+                  width: 40px;
+                  height: 40px;
+                  border-radius: 50%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  font-weight: 700;
+                  margin: 0 auto var(--space-3);
+                "
+              >
+                2
+              </div>
+              <h4
+                style="
+                  color: var(--text-primary);
+                  margin-bottom: var(--space-2);
+                "
+              >
+                Take Screenshot
+              </h4>
+              <p style="color: var(--text-secondary)">
+                Capture the final score screen as proof
+              </p>
+            </div>
+
+            <div class="step" style="text-align: center">
+              <div
+                class="step-number"
+                style="
+                  background: var(--gradient-primary);
+                  color: var(--black);
+                  width: 40px;
+                  height: 40px;
+                  border-radius: 50%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  font-weight: 700;
+                  margin: 0 auto var(--space-3);
+                "
+              >
+                3
+              </div>
+              <h4
+                style="
+                  color: var(--text-primary);
+                  margin-bottom: var(--space-2);
+                "
+              >
+                Submit Results
+              </h4>
+              <p style="color: var(--text-secondary)">
+                Go to Media page and upload your result
+              </p>
+            </div>
+
+            <div class="step" style="text-align: center">
+              <div
+                class="step-number"
+                style="
+                  background: var(--gradient-primary);
+                  color: var(--black);
+                  width: 40px;
+                  height: 40px;
+                  border-radius: 50%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  font-weight: 700;
+                  margin: 0 auto var(--space-3);
+                "
+              >
+                4
+              </div>
+              <h4
+                style="
+                  color: var(--text-primary);
+                  margin-bottom: var(--space-2);
+                "
+              >
+                Wait for Verification
+              </h4>
+              <p style="color: var(--text-secondary)">
+                Admin will verify and update standings
+              </p>
+            </div>
+          </div>
+
+          <div style="text-align: center; margin-top: var(--space-6)">
+            <a href="media.html" class="btn btn-primary"
+              >Go to Media Page to Submit Results</a
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <div class="footer-logo">
+              <div class="logo"></div>
+              <span class="logo-text">UON Efootball Hub</span>
+            </div>
+            <p class="footer-description">
+              The official online platform for University of Nairobi's eFootball
+              community. Home of the UON Champions League 2025.
+            </p>
+            <div class="social-links">
+              <a href="#" class="social-link" aria-label="Instagram">📷</a>
+              <a href="#" class="social-link" aria-label="YouTube">🎥</a>
+              <a href="#" class="social-link" aria-label="Twitch">🔴</a>
+              <a href="#" class="social-link" aria-label="Twitter">🐦</a>
+              <a
+                href="https://chat.whatsapp.com/FbtJPdiPtzFFDQqzcAz75A"
+                class="social-link"
+                aria-label="WhatsApp"
+                >💬</a
+              >
+              <a href="#" class="social-link" aria-label="Discord">🎮</a>
+            </div>
+          </div>
+
+          <div class="footer-section">
+            <h3>Quick Links</h3>
+            <ul class="footer-links">
+              <li><a href="index.html">Home</a></li>
+              <li><a href="about.html">About</a></li>
+              <li><a href="tournaments.html">UCL 2025</a></li>
+              <li><a href="leaderboard.html">Leaderboard</a></li>
+              <li><a href="media.html">Submit Results</a></li>
+              <li><a href="profile.html">My Profile</a></li>
+              <li><a href="join.html">Join Hub</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-section">
+            <h3>UCL 2025</h3>
+            <ul class="footer-links">
+              <li><a href="tournaments.html">Tournament Info</a></li>
+              <li><a href="tournaments.html#rules">Rules & Format</a></li>
+              <li><a href="leaderboard.html">Standings</a></li>
+              <li><a href="media.html">Match Results</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-section">
+            <h3>Support</h3>
+            <ul class="footer-links">
+              <li><a href="community.html">Community Guidelines</a></li>
+              <li><a href="contact.html">Contact Admin</a></li>
+              <li><a href="community.html">Tournament WhatsApp</a></li>
+              <li><a href="contact.html">Report Issues</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <p>
+            &copy; 2025 UON Efootball Hub – Official Home of UON Champions
+            League
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
+
+    <!-- Scripts -->
+    <script src="js/firebase-config.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/tournaments.js"></script>
+  </body>
+</html>

@@ -1,0 +1,197 @@
+/* CSS Custom Properties for Theme Management */
+:root {
+  /* PES ARENA Color Palette */
+  --primary-green: #00ff88;
+  --primary-green-dark: #00cc6a;
+  --esports-blue: #007aff;
+  --esports-blue-dark: #0056cc;
+  --cyber-purple: #8a2be2;
+  --cyber-purple-dark: #6a1bb8;
+  --white: #ffffff;
+  --black: #000000;
+  
+  /* Dark Theme Colors */
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #111111;
+  --bg-tertiary: #1a1a1a;
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0a0;
+  --text-muted: #666666;
+  
+  /* Light Theme Colors */
+  --bg-primary-light: #ffffff;
+  --bg-secondary-light: #f8f9fa;
+  --bg-tertiary-light: #e9ecef;
+  --text-primary-light: #000000;
+  --text-secondary-light: #4a4a4a;
+  --text-muted-light: #6c757d;
+  
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, var(--primary-green), var(--cyber-purple));
+  --gradient-dark: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+  --gradient-glow: linear-gradient(135deg, var(--primary-green), transparent);
+  
+  /* Glassmorphism & Borders */
+  --border-color: rgba(0, 255, 136, 0.2);
+  
+  /* Shadows and Glows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --glow-sm: 0 0 10px rgba(0, 255, 136, 0.1);
+  --glow-md: 0 0 20px rgba(0, 255, 136, 0.2);
+  --glow-lg: 0 0 30px rgba(0, 255, 136, 0.3);
+  
+  /* Typography */
+  --font-heading: 'Orbitron', sans-serif;
+  --font-body: 'Poppins', sans-serif;
+  
+  /* Font Sizes */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+  --text-5xl: 3rem;
+  
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  
+  /* Border Radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+}
+
+/* Light Theme Overrides */
+[data-theme="light"] {
+  --bg-primary: var(--bg-primary-light);
+  --bg-secondary: var(--bg-secondary-light);
+  --bg-tertiary: var(--bg-tertiary-light);
+  --text-primary: var(--text-primary-light);
+  --text-secondary: var(--text-secondary-light);
+  --text-muted: var(--text-muted-light);
+}
+
+/* --- Global Player Directory & Form Styles --- */
+.form-indicator {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    margin: 10px 0;
+}
+
+.form-circle {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Logic: W-L-D Colors */
+.form-w { background-color: #00ff88; box-shadow: 0 0 8px rgba(0, 255, 136, 0.5); } /* Win */
+.form-l { background-color: #ff4444; box-shadow: 0 0 8px rgba(255, 68, 68, 0.3); } /* Loss */
+.form-d { background-color: #888888; } /* Draw */
+
+/* Search Bar Styling */
+.player-search-wrapper {
+    margin-bottom: 2rem;
+    position: relative;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#player-search-input {
+    width: 100%;
+    padding: 12px 20px;
+    background: var(--bg-tertiary);
+    border: 2px solid var(--border-color);
+    border-radius: 30px;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease;
+}
+
+#player-search-input:focus {
+    border-color: var(--primary-green);
+    outline: none;
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
+}
+
+/* Dispute Button Style */
+.btn-dispute {
+    color: #ff9800;
+    font-size: 0.8rem;
+    text-decoration: underline;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    margin-left: 10px;
+}
+.btn-dispute:hover { color: #ff5722; }
+
+/* Professional View Stats Button */
+.btn-view-stats {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background: transparent;
+    border: 2px solid var(--primary-green);
+    color: var(--primary-green);
+    border-radius: 8px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-top: 15px;
+    font-family: 'Orbitron', sans-serif;
+}
+
+.btn-view-stats:hover {
+    background: var(--primary-green);
+    color: #000;
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+    transform: translateY(-2px);
+}
+
+/* Form Circles with W/L/D Letters */
+.form-circle {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: #000;
+    text-shadow: none;
+}
+
+.form-w { background-color: var(--primary-green); }
+.form-l { background-color: #ff4444; color: #fff; }
+.form-d { background-color: #888; color: #fff; }

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="UON Efootball Media Gallery - Photos, videos, and highlights from virtual football tournaments and events."
+    />
+    <title>Media Gallery - UON Efootball Photos & Videos</title>
+
+    <!-- Lightbox CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css"
+    />
+
+    <!-- Shared CSS -->
+    <link rel="stylesheet" href="css/variables.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+
+    <!-- Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="nav-logo">
+          <img
+            src="images/logos/uon-efootball-logo.png"
+            alt="UON Efootball Hub"
+            class="logo"
+          />
+          <span class="logo-text">UON Efootball Hub</span>
+        </div>
+
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <a href="index.html" class="nav-link">Home</a>
+          </li>
+          <li class="nav-item">
+            <a href="about.html" class="nav-link">About</a>
+          </li>
+          <li class="nav-item">
+            <a href="tournaments.html" class="nav-link">Tournaments</a>
+          </li>
+          <li class="nav-item">
+            <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+          </li>
+          <li class="nav-item">
+            <a href="media.html" class="nav-link active">Media</a>
+          </li>
+          <li class="nav-item">
+            <a href="blog.html" class="nav-link">News</a>
+          </li>
+          <li class="nav-item">
+            <a href="community.html" class="nav-link">Community</a>
+          </li>
+          <li class="nav-item" id="nav-join-hub">
+            <a href="join.html" class="nav-link join-btn">Join Hub</a>
+          </li>
+          <li class="nav-item">
+            <a href="tournaments.html" class="nav-link">UCL</a>
+          </li>
+          <li class="nav-item">
+            <a href="profile.html" class="nav-link">My Profile</a>
+          </li>
+        </ul>
+
+        <div class="nav-actions">
+          <button
+            class="dark-mode-toggle"
+            id="darkModeToggle"
+            aria-label="Toggle dark mode"
+          >
+            <span class="toggle-icon">🌙</span>
+          </button>
+          <div class="hamburger" id="hamburger">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Media Hero -->
+    <section class="page-hero media-hero">
+      <div class="hero-background">
+        <div class="hero-overlay"></div>
+      </div>
+
+      <div class="container">
+        <div class="page-hero-content">
+          <h1 class="page-hero-title">Media Gallery</h1>
+          <p class="page-hero-description">
+            Relive the best moments from UON Efootball tournaments through
+            photos, videos, and highlights
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Media Tabs -->
+    <section class="media-tabs-section">
+      <div class="container">
+        <div class="media-tabs">
+          <button class="tab-btn active" data-tab="photos">Photos</button>
+          <button class="tab-btn" data-tab="videos">Videos</button>
+          <button class="tab-btn" data-tab="highlights">Highlights</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Photos Tab -->
+    <section id="photos" class="media-content active">
+      <div class="container">
+        <div class="media-header">
+          <h2>Tournament Photos</h2>
+          <div class="media-filters">
+            <select class="filter-select" id="photo-category">
+              <option value="all">All Categories</option>
+              <option value="tournament">Tournaments</option>
+              <option value="players">Players</option>
+              <option value="events">Events</option>
+              <option value="behind-scenes">Behind the Scenes</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="photo-grid" id="photo-grid">
+          <!-- Photos will be loaded dynamically -->
+        </div>
+
+        <div class="load-more-container">
+          <button class="btn btn-outline" id="load-more-photos">
+            Load More Photos
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Videos Tab -->
+    <section id="videos" class="media-content">
+      <div class="container">
+        <div class="media-header">
+          <h2>Video Library</h2>
+          <div class="media-filters">
+            <select class="filter-select" id="video-category">
+              <option value="all">All Categories</option>
+              <option value="matches">Full Matches</option>
+              <option value="interviews">Player Interviews</option>
+              <option value="tutorials">Tutorials</option>
+              <option value="events">Event Coverage</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="video-grid" id="video-grid">
+          <!-- Videos will be loaded dynamically -->
+        </div>
+
+        <div class="load-more-container">
+          <button class="btn btn-outline" id="load-more-videos">
+            Load More Videos
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Highlights Tab -->
+    <section id="highlights" class="media-content">
+      <div class="container">
+        <div class="media-header">
+          <h2>Match Highlights</h2>
+          <div class="media-filters">
+            <select class="filter-select" id="highlight-tournament">
+              <option value="all">All Tournaments</option>
+              <option value="championship-2025">Championship 2025</option>
+              <option value="weekly-cup">Weekly Cup</option>
+              <option value="team-tournament">Team Tournament</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="highlights-grid" id="highlights-grid">
+          <!-- Highlights will be loaded dynamically -->
+        </div>
+
+        <div class="load-more-container">
+          <button class="btn btn-outline" id="load-more-highlights">
+            Load More Highlights
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <!-- Same footer as index.html -->
+    </footer>
+
+    <!-- Lightbox JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/darkmode.js"></script>
+    <script src="js/animations.js"></script>
+    <script src="js/media.js"></script>
+  </body>
+</html>

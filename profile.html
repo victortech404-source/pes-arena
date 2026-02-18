@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Profile - PES ARENA</title>
+    <link rel="stylesheet" href="css/variables.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+      .profile-header-card {
+        background: var(--bg-tertiary);
+        padding: 40px;
+        border-radius: 20px;
+        text-align: center;
+        border: 1px solid var(--primary-green);
+        margin-top: -60px;
+        position: relative;
+        z-index: 2;
+      }
+      .avatar-container {
+        width: 150px;
+        height: 150px;
+        margin: 0 auto 20px;
+        position: relative;
+      }
+      .avatar-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 4px solid var(--primary-green);
+        background: #000;
+      }
+      .upload-btn {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        background: var(--gold);
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+      }
+      .upload-btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 15px var(--gold);
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 15px;
+        margin: 30px 0;
+        background: var(--bg-secondary);
+        padding: 20px;
+        border-radius: 12px;
+      }
+      .stat-box {
+        text-align: center;
+      }
+      .stat-val {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #fff;
+        font-family: var(--font-heading);
+      }
+      .stat-label {
+        color: var(--text-secondary);
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .content-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        margin-top: 40px;
+      }
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #333;
+        padding-bottom: 10px;
+      }
+      .h-title {
+        color: var(--primary-green);
+        font-size: 1.2rem;
+      }
+
+      /* Onboarding Form Styles */
+      #onboarding-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.95);
+        z-index: 3000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(10px);
+      }
+
+      #onboarding-form {
+        background: var(--bg-tertiary);
+        padding: 40px;
+        border-radius: 20px;
+        width: 90%;
+        max-width: 500px;
+        border: 2px solid var(--primary-green);
+        box-shadow: 0 0 30px rgba(0, 255, 136, 0.2);
+      }
+
+      .onboarding-title {
+        color: var(--primary-green);
+        text-align: center;
+        margin-bottom: 10px;
+        font-family: var(--font-heading);
+        font-size: 1.8rem;
+      }
+
+      .onboarding-subtitle {
+        color: var(--text-secondary);
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 0.9rem;
+      }
+
+      .platform-options {
+        display: flex;
+        gap: 15px;
+        margin: 15px 0;
+      }
+
+      .platform-option {
+        flex: 1;
+        padding: 15px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .platform-option:hover {
+        background: rgba(0, 255, 136, 0.1);
+        border-color: var(--primary-green);
+      }
+
+      .platform-option.active {
+        background: rgba(0, 255, 136, 0.15);
+        border-color: var(--primary-green);
+        color: var(--primary-green);
+      }
+
+      .platform-icon {
+        font-size: 1.5rem;
+        margin-bottom: 5px;
+        display: block;
+      }
+
+      /* Modal Styles */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 2000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(5px);
+      }
+      .modal-box {
+        background: var(--bg-tertiary);
+        padding: 30px;
+        border-radius: 16px;
+        width: 90%;
+        max-width: 500px;
+        border: 1px solid var(--primary-green);
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+
+      /* Edit Profile Form Styling */
+      #edit-profile-form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      #edit-profile-form input,
+      #edit-profile-form select {
+        width: 100%;
+        padding: 12px;
+        background: #222;
+        border: 1px solid #444;
+        color: white;
+        border-radius: 8px;
+        box-sizing: border-box;
+      }
+
+      #edit-profile-form input:focus,
+      #edit-profile-form select:focus {
+        border-color: var(--primary-green);
+        outline: none;
+      }
+
+      #edit-profile-form label {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        margin-bottom: 5px;
+        display: block;
+      }
+
+      .required-star {
+        color: #ff6b6b;
+        margin-left: 3px;
+      }
+
+      .onboarding-required-note {
+        background: rgba(255, 107, 107, 0.1);
+        border: 1px solid #ff6b6b;
+        border-radius: 8px;
+        padding: 10px;
+        margin-bottom: 20px;
+        text-align: center;
+        color: #ff6b6b;
+        font-size: 0.9rem;
+      }
+
+      .platform-radio-group {
+        display: flex;
+        gap: 20px;
+        margin-top: 10px;
+      }
+
+      .platform-radio-group label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+      }
+
+      .platform-radio-group input[type="radio"] {
+        width: auto;
+        accent-color: var(--primary-green);
+      }
+
+      .form-buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+      }
+
+      .form-buttons button {
+        flex: 1;
+        padding: 12px;
+      }
+
+      .cancel-btn {
+        background: transparent;
+        border: 1px solid #666;
+        color: #ccc;
+        cursor: pointer;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+      }
+
+      .cancel-btn:hover {
+        border-color: #ff6b6b;
+        color: #ff6b6b;
+      }
+
+      .cancel-btn.hidden {
+        display: none;
+      }
+
+      /* Disabled navigation */
+      .nav-link.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        pointer-events: none;
+      }
+
+      /* Match History Cards */
+      .match-card {
+        background: var(--bg-primary);
+        padding: 15px;
+        border-radius: 12px;
+        margin-bottom: 10px;
+        transition: all 0.3s ease;
+      }
+
+      .match-card:hover {
+        transform: translateX(5px);
+        box-shadow: -5px 0 15px rgba(0, 255, 136, 0.2);
+      }
+
+      .match-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+
+      .match-opponent {
+        font-weight: bold;
+        color: #fff;
+      }
+
+      .match-tournament {
+        color: var(--text-secondary);
+        font-size: 0.8rem;
+      }
+
+      .match-score {
+        font-family: var(--font-heading);
+        font-size: 1.5rem;
+        color: #fff;
+        text-align: center;
+      }
+
+      .match-details {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: var(--text-secondary);
+        font-size: 0.8rem;
+      }
+
+      .win-border {
+        border-left: 4px solid #00ff88;
+      }
+
+      .loss-border {
+        border-left: 4px solid #ff6b6b;
+      }
+
+      .draw-border {
+        border-left: 4px solid #ffd700;
+      }
+
+      .status-badge {
+        font-size: 0.7rem;
+        padding: 2px 8px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .status-badge.pending {
+        background: #ffaa00;
+        color: #000;
+      }
+
+      .status-badge.approved {
+        background: #00ff88;
+        color: #000;
+      }
+
+      .status-badge.rejected {
+        background: #ff6b6b;
+        color: #fff;
+      }
+
+      @media (max-width: 768px) {
+        .stats-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        .content-grid {
+          grid-template-columns: 1fr;
+        }
+        .modal-box {
+          width: 95%;
+          padding: 20px;
+          margin: 20px auto;
+        }
+        #onboarding-form {
+          padding: 25px;
+          width: 95%;
+        }
+        .platform-options {
+          flex-direction: column;
+        }
+        .platform-radio-group {
+          flex-direction: column;
+          gap: 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Onboarding Overlay (Shown if profile incomplete) -->
+    <div id="onboarding-overlay" style="display: none;">
+      <div id="onboarding-form">
+        <h2 class="onboarding-title">🎮 Welcome to PES ARENA!</h2>
+        <p class="onboarding-subtitle">Complete your profile to start competing</p>
+        
+        <form id="profile-setup-form">
+          <div class="form-group">
+            <label for="gamer-tag">Gamer Tag <span class="required-star">*</span></label>
+            <input type="text" id="gamer-tag" required 
+                   placeholder="Enter your unique username" 
+                   maxlength="20">
+            <small style="color: var(--text-secondary);">This will be your display name in tournaments</small>
+          </div>
+
+          <div class="form-group">
+            <label for="phone-number">Phone Number <span class="required-star">*</span></label>
+            <input type="tel" id="phone-number" required 
+                   placeholder="e.g. 0712345678" 
+                   pattern="[0-9]{10}"
+                   maxlength="10">
+            <small style="color: var(--text-secondary);">Used for prize payouts and notifications</small>
+          </div>
+
+          <div class="form-group">
+            <label>Preferred Platform <span class="required-star">*</span></label>
+            <div class="platform-options">
+              <div class="platform-option" onclick="selectPlatform('Touch')">
+                <span class="platform-icon">📱</span>
+                <span>Touch/Mobile</span>
+              </div>
+              <div class="platform-option" onclick="selectPlatform('Controller')">
+                <span class="platform-icon">🎮</span>
+                <span>Controller</span>
+              </div>
+            </div>
+            <input type="hidden" id="platform" required>
+          </div>
+
+          <div class="form-group">
+            <label for="institution">Institution/Region <span class="required-star">*</span></label>
+            <select id="institution" required style="width: 100%; padding: 12px; background: #222; border: 1px solid #444; color: white; border-radius: 8px;">
+              <option value="" disabled selected>Select your region or institution</option>
+              <optgroup label="Universities">
+                <option value="University of Nairobi">University of Nairobi</option>
+                <option value="Kenyatta University">Kenyatta University</option>
+                <option value="Strathmore University">Strathmore University</option>
+                <option value="JKUAT">JKUAT</option>
+                <option value="Mount Kenya University">Mount Kenya University</option>
+                <option value="Kabarak University">Kabarak University</option>
+                <option value="Daystar University">Daystar University</option>
+                <option value="USIU">USIU</option>
+              </optgroup>
+              <optgroup label="Regions">
+                <option value="Nairobi Region">Nairobi Region</option>
+                <option value="Central Region">Central Region</option>
+                <option value="Rift Valley">Rift Valley</option>
+                <option value="Coast Region">Coast Region</option>
+                <option value="Western Region">Western Region</option>
+                <option value="Nyanza Region">Nyanza Region</option>
+                <option value="North Eastern">North Eastern</option>
+              </optgroup>
+              <option value="other">Other (Please specify)</option>
+            </select>
+            <input type="text" id="other-institution" style="margin-top: 10px; display: none;" 
+                   placeholder="Specify your region or institution">
+          </div>
+
+          <div class="form-group" style="margin-top: 30px;">
+            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 15px;">
+              ✅ Complete Profile & Start Playing
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="nav-logo">
+          <div class="logo"></div>
+          <span class="logo-text">PES ARENA</span>
+        </div>
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <a href="index.html" class="nav-link disabled" id="home-link">Home</a>
+          </li>
+          <li class="nav-item">
+            <a href="tournaments.html" class="nav-link disabled" id="tournaments-link">Tournaments</a>
+          </li>
+          <li class="nav-item">
+            <a href="leaderboard.html" class="nav-link disabled" id="leaderboard-link">Leaderboard</a>
+          </li>
+          <li class="nav-item">
+            <a href="profile.html" class="nav-link active">My Profile</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <section
+      class="page-hero"
+      style="
+        min-height: 30vh;
+        background: linear-gradient(to bottom, #003311, var(--bg-primary));
+      "
+    >
+      <div class="hero-content"></div>
+    </section>
+
+    <section class="live-widget-section">
+      <div class="container">
+        <div class="profile-header-card">
+          <div class="avatar-container">
+            <img
+              id="p-avatar"
+              src="images/default-avatar.png"
+              class="avatar-img"
+              onerror="this.src='https://via.placeholder.com/150'"
+            />
+            <button
+              class="upload-btn"
+              onclick="document.getElementById('avatar-input').click()"
+            >
+              📷
+            </button>
+            <input type="file" id="avatar-input" hidden accept="image/*" />
+          </div>
+
+          <h1 id="p-name" style="margin: 0; color: white">Loading...</h1>
+          <p
+            id="p-tag"
+            style="
+              color: var(--primary-green);
+              font-size: 1.1rem;
+              margin: 5px 0;
+            "
+          >
+            @...
+          </p>
+          <p
+            id="p-institution"
+            style="color: var(--text-secondary); font-size: 0.9rem"
+          >
+            Loading...
+          </p>
+          <p id="p-platform" style="color: var(--gold); font-size: 0.9rem; margin: 5px 0;">
+            Platform: <span id="platform-display">Loading...</span>
+          </p>
+
+          <div class="stats-grid">
+            <div class="stat-box">
+              <div class="stat-val" id="s-wins">0</div>
+              <div class="stat-label">Wins</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-val" id="s-draws">0</div>
+              <div class="stat-label">Draws</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-val" id="s-losses">0</div>
+              <div class="stat-label">Losses</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-val" id="s-goals">0</div>
+              <div class="stat-label">Goals Scored</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-val" id="s-clean-sheets">0</div>
+              <div class="stat-label">Clean Sheets</div>
+            </div>
+          </div>
+
+          <button onclick="openEditModal()" class="btn btn-outline">
+            ✏️ Edit Profile
+          </button>
+        </div>
+
+        <div class="content-grid">
+          <div>
+            <div class="section-header">
+              <span class="h-title">🏆 My Tournaments</span>
+              <a
+                href="tournaments.html"
+                class="disabled"
+                id="tournaments-link2"
+                style="
+                  color: var(--gold);
+                  text-decoration: none;
+                  font-size: 0.9rem;
+                "
+                >Find More →</a
+              >
+            </div>
+            <div id="my-tournaments-list" style="display: grid; gap: 15px">
+              <p style="color: #666; text-align: center">
+                Loading registered tournaments...
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <div class="section-header">
+              <span class="h-title">⚽ Match History</span>
+            </div>
+            <div id="match-history-list" style="display: grid; gap: 15px">
+              <p style="color: #666; text-align: center">
+                No matches played yet.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div id="edit-modal" class="modal-overlay">
+      <div class="modal-box">
+        <h2 style="color: white; margin-bottom: 20px">Edit Profile</h2>
+        <form
+          id="edit-profile-form"
+          class="registration-form"
+          style="padding: 0; background: transparent"
+        >
+          <div class="form-group">
+            <label>Full Name <span class="required-star">*</span></label>
+            <input type="text" id="edit-name" required />
+          </div>
+          <div class="form-group">
+            <label>Gamer Tag <span class="required-star">*</span></label>
+            <input type="text" id="edit-tag" required />
+          </div>
+          <div class="form-group">
+            <label>Phone Number <span class="required-star">*</span></label>
+            <input type="tel" id="edit-phone" pattern="[0-9]{10}" required />
+          </div>
+          <div class="form-group">
+            <label>Preferred Platform <span class="required-star">*</span></label>
+            <div class="platform-radio-group">
+              <label>
+                <input type="radio" name="edit-platform" value="Touch" required>
+                <span>📱 Touch/Mobile</span>
+              </label>
+              <label>
+                <input type="radio" name="edit-platform" value="Controller" required>
+                <span>🎮 Controller</span>
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Institution/Region <span class="required-star">*</span></label>
+            <select id="edit-institution" required>
+              <option value="" disabled selected>Select your region or institution</option>
+              <optgroup label="Universities">
+                <option value="University of Nairobi">University of Nairobi</option>
+                <option value="Kenyatta University">Kenyatta University</option>
+                <option value="Strathmore University">Strathmore University</option>
+                <option value="JKUAT">JKUAT</option>
+                <option value="Mount Kenya University">Mount Kenya University</option>
+                <option value="Kabarak University">Kabarak University</option>
+                <option value="Daystar University">Daystar University</option>
+                <option value="USIU">USIU</option>
+              </optgroup>
+              <optgroup label="Regions">
+                <option value="Nairobi Region">Nairobi Region</option>
+                <option value="Central Region">Central Region</option>
+                <option value="Rift Valley">Rift Valley</option>
+                <option value="Coast Region">Coast Region</option>
+                <option value="Western Region">Western Region</option>
+                <option value="Nyanza Region">Nyanza Region</option>
+                <option value="North Eastern">North Eastern</option>
+              </optgroup>
+              <option value="other">Other</option>
+            </select>
+            <input type="text" id="edit-other-institution" style="margin-top: 10px; display: none;" 
+                   placeholder="Specify your region or institution">
+          </div>
+          <div class="form-buttons">
+            <button type="submit" class="btn btn-primary">
+              Save Changes
+            </button>
+            <button
+              type="button"
+              onclick="closeEditModal()"
+              class="cancel-btn"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-bottom"><p>&copy; 2025 PES ARENA</p></div>
+      </div>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/profile.js"></script>
+    <script>
+      // Platform selection function for onboarding
+      function selectPlatform(value) {
+        document.querySelectorAll('.platform-option').forEach(option => {
+          option.classList.remove('active');
+        });
+        event.currentTarget.classList.add('active');
+        document.getElementById('platform').value = value;
+      }
+
+      // Institution dropdown handler for onboarding
+      document.getElementById('institution')?.addEventListener('change', function() {
+        const otherInput = document.getElementById('other-institution');
+        if (this.value === 'other') {
+          otherInput.style.display = 'block';
+          otherInput.required = true;
+        } else {
+          otherInput.style.display = 'none';
+          otherInput.required = false;
+        }
+      });
+
+      // Institution dropdown handler for edit modal
+      document.getElementById('edit-institution')?.addEventListener('change', function() {
+        const otherInput = document.getElementById('edit-other-institution');
+        if (this.value === 'other') {
+          otherInput.style.display = 'block';
+          otherInput.required = true;
+        } else {
+          otherInput.style.display = 'none';
+          otherInput.required = false;
+        }
+      });
+
+      // Enable navigation links after profile completion
+      function enableNavigation() {
+        const navLinks = document.querySelectorAll('.nav-link.disabled, #tournaments-link2.disabled');
+        navLinks.forEach(link => {
+          link.classList.remove('disabled');
+          link.style.pointerEvents = 'auto';
+          link.style.opacity = '1';
+        });
+      }
+
+      // Modal Logic
+      function openEditModal() {
+        document.getElementById("edit-modal").style.display = "flex";
+      }
+      
+      function closeEditModal() {
+        const modal = document.getElementById("edit-modal");
+        if (modal) {
+          modal.style.display = "none";
+        }
+      }
+
+      // Handle onboarding form submission
+      document.getElementById('profile-setup-form')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const platform = document.getElementById('platform').value;
+        if (!platform) {
+          Swal.fire({
+            title: 'Platform Required',
+            text: 'Please select your preferred platform',
+            icon: 'warning',
+            confirmButtonColor: '#00ff88'
+          });
+          return;
+        }
+
+        const institution = document.getElementById('institution').value;
+        let finalInstitution = institution;
+        if (institution === 'other') {
+          finalInstitution = document.getElementById('other-institution').value;
+          if (!finalInstitution) {
+            Swal.fire({
+              title: 'Institution Required',
+              text: 'Please specify your institution or region',
+              icon: 'warning',
+              confirmButtonColor: '#00ff88'
+            });
+            return;
+          }
+        }
+
+        const profileData = {
+          gamerTag: document.getElementById('gamer-tag').value,
+          phone: document.getElementById('phone-number').value,
+          platform: platform,
+          institution: finalInstitution
+        };
+
+        // This will be handled by profile.js
+        if (window.profileManager) {
+          await window.profileManager.completeOnboarding(profileData);
+        }
+      });
+    </script>
+  </body>
+</html>

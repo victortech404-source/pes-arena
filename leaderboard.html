@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Empty favicon to prevent console errors -->
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    
+    <!-- Primary Meta Tags -->
+    <title>Leaderboard & Campus Legends - UON GRiD</title>
+    <meta
+      name="title"
+      content="Leaderboard & Campus Legends - UON GRiD"
+    />
+    <meta
+      name="description"
+      content="View tournament results, rankings, and explore the Campus Legends Directory of University of Nairobi eFootball players."
+    />
+    <meta
+      name="keywords"
+      content="UON GRiD leaderboard, campus legends, UON eFootball rankings, player directory, tournament results"
+    />
+    <meta name="author" content="UON GRiD" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/variables.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+
+    <!-- Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="nav-logo">
+          <div class="logo"></div>
+          <span class="logo-text">UON GRiD</span>
+        </div>
+
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <a href="index.html" class="nav-link">Home</a>
+          </li>
+          <li class="nav-item">
+            <a href="about.html" class="nav-link">About</a>
+          </li>
+          <li class="nav-item">
+            <a href="tournaments.html" class="nav-link">Tournaments</a>
+          </li>
+          <li class="nav-item">
+            <a href="leaderboard.html" class="nav-link active">Leaderboard</a>
+          </li>
+          <li class="nav-item">
+            <a href="blog.html" class="nav-link">News</a>
+          </li>
+          <li class="nav-item">
+            <a href="community.html" class="nav-link">Community</a>
+          </li>
+          <li class="nav-item" id="nav-join-hub">
+            <a href="join.html" class="nav-link join-btn">Join Hub</a>
+          </li>
+          <li class="nav-item">
+            <a href="profile.html" class="nav-link">My Profile</a>
+          </li>
+        </ul>
+
+        <div class="nav-actions">
+          <button
+            class="dark-mode-toggle"
+            id="darkModeToggle"
+            aria-label="Toggle dark mode"
+          >
+            <span class="toggle-icon">🌙</span>
+          </button>
+          <div class="hamburger" id="hamburger">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <section class="page-hero">
+      <div class="hero-content">
+        <h1 class="hero-title">Results & Legends Directory</h1>
+        <p class="hero-description">
+          View tournament results and explore the Campus Legends Directory.
+        </p>
+      </div>
+    </section>
+
+    <!-- Tournament Results Section (MOVED TO TOP) -->
+    <section class="tournament-results-section">
+      <div class="container">
+        <div id="leaderboard-list-view">
+          <h2 class="section-title">🏅 Tournament Results</h2>
+          <div id="lb-tournaments-container" style="display: grid; gap: 20px">
+            <div class="loading-spinner large" style="margin: 50px auto"></div>
+          </div>
+        </div>
+
+        <div id="leaderboard-embed-view" style="display: none">
+          <button
+            onclick="window.leaderboardManager.showList()"
+            class="btn btn-outline"
+            style="margin-bottom: 20px"
+          >
+            ← Back to List
+          </button>
+
+          <h2
+            id="embed-title"
+            class="section-title"
+            style="margin-bottom: 20px"
+          >
+            Tournament Name
+          </h2>
+
+          <div
+            class="info-card"
+            style="
+              padding: 0;
+              overflow: hidden;
+              height: 850px;
+              background: white;
+              border-radius: 12px;
+            "
+          >
+            <iframe
+              id="lb-embed-frame"
+              style="width: 100%; height: 100%; border: none"
+              src=""
+              title="Tournament Bracket"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Campus Legends Directory Section (MOVED TO FOLLOW) -->
+    <section class="legends-directory-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">🏆 Campus Legends Directory</h2>
+          <p class="section-subtitle">Discover and connect with top players from University of Nairobi</p>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="search-container">
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input 
+              type="text" 
+              id="player-search-input" 
+              placeholder="Search players by GamerTag..." 
+              class="search-input"
+              autocomplete="off"
+            />
+            <div class="search-stats" id="search-stats">
+              <span id="player-count">Loading players...</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tournament Filters Container -->
+        <div class="tournament-filters-container">
+          <h3 class="filters-title">Tournament Filters</h3>
+          <p class="filters-subtitle">Click a tournament to view its participants</p>
+          
+          <div class="tournament-filters-buttons" id="tournament-filters-buttons">
+            <!-- All Players button (active by default) -->
+            <button class="tournament-filter-btn active" data-tournament="all">
+              All Players
+              <span class="player-count-badge" id="all-players-count">0</span>
+            </button>
+            
+            <!-- Tournament buttons will be dynamically added here -->
+            <div class="loading-spinner small" style="margin: 10px auto;"></div>
+          </div>
+        </div>
+
+        <!-- Main Display Area -->
+        <div class="legends-display-area">
+          <!-- Players Grid -->
+          <div id="legends-list-container" class="legends-grid">
+            <div class="skeleton-loader" style="height: 300px;"></div>
+            <div class="skeleton-loader" style="height: 300px;"></div>
+            <div class="skeleton-loader" style="height: 300px;"></div>
+            <div class="skeleton-loader" style="height: 300px;"></div>
+          </div>
+
+          <!-- No Results Message (Hidden by default) -->
+          <div id="no-results-message" class="no-results-message" style="display: none;">
+            <div class="no-results-icon">😕</div>
+            <h3>No players found</h3>
+            <p>Try selecting a different tournament or search with a different name.</p>
+          </div>
+
+          <!-- Empty Tournament Message -->
+          <div id="empty-tournament-message" class="no-results-message" style="display: none;">
+            <div class="no-results-icon">🏆</div>
+            <h3>No players in this tournament</h3>
+            <p>This tournament doesn't have any registered players yet.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Player Stats Modal (Will be populated by JavaScript) -->
+    <div id="player-stats-modal" class="modal-overlay" style="display: none;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 id="modal-player-name">Player Name</h3>
+          <button class="modal-close" onclick="hidePlayerStatsModal()">×</button>
+        </div>
+        <div class="modal-body" id="modal-player-stats">
+          <!-- Will be populated by JavaScript -->
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <div class="footer-logo">
+              <div class="logo"></div>
+              <span class="logo-text">UON GRiD</span>
+            </div>
+            <p class="footer-description">
+              The official online platform for University of Nairobi's eFootball
+              community. Promoting digital gaming excellence and community
+              interaction.
+            </p>
+            <div class="social-links">
+              <a href="#" class="social-link" aria-label="Instagram">📷</a>
+              <a href="#" class="social-link" aria-label="YouTube">🎥</a>
+              <a href="#" class="social-link" aria-label="Twitch">🔴</a>
+              <a href="#" class="social-link" aria-label="Twitter">🐦</a>
+              <a
+                href="https://chat.whatsapp.com/FbtJPdiPtzFFDQqzcAz75A"
+                class="social-link"
+                aria-label="WhatsApp"
+                >💬</a
+              >
+              <a href="#" class="social-link" aria-label="Discord">🎮</a>
+            </div>
+          </div>
+
+          <div class="footer-section">
+            <h3>Quick Links</h3>
+            <ul class="footer-links">
+              <li><a href="index.html">Home</a></li>
+              <li><a href="about.html">About</a></li>
+              <li><a href="tournaments.html">Tournaments</a></li>
+              <li><a href="leaderboard.html">Leaderboard</a></li>
+              <li><a href="blog.html">News & Blog</a></li>
+              <li><a href="join.html">Join Hub</a></li>
+              <li><a href="contact.html">Contact</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-section">
+            <h3>Tournaments</h3>
+            <ul class="footer-links">
+              <li><a href="tournaments.html">Current Events</a></li>
+              <li>
+                <a href="tournaments.html#calendar">Tournament Calendar</a>
+              </li>
+              <li><a href="tournaments.html#rules">Competition Rules</a></li>
+              <li><a href="leaderboard.html#rankings">Season Rankings</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-section">
+            <h3>Support</h3>
+            <ul class="footer-links">
+              <li><a href="contact.html">Help Center</a></li>
+              <li><a href="community.html">Community Guidelines</a></li>
+              <li><a href="contact.html#feedback">Report Issue</a></li>
+              <li><a href="sponsors.html">Partnerships</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <p>
+            &copy; 2025 UON GRiD – Powered by the University of Nairobi eSports
+            Community.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-analytics-compat.js"></script>
+
+    <script src="js/firebase-config.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/leaderboard.js"></script>
+    <script>
+      // Add this JavaScript to handle the tournament filtering functionality
+      document.addEventListener('DOMContentLoaded', function() {
+        // This will be populated by the main leaderboard.js
+        // But we'll add the basic structure here
+        
+        // Tournament filter functionality
+        function setupTournamentFilters() {
+          const filterButtons = document.querySelectorAll('.tournament-filter-btn');
+          filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+              // Remove active class from all buttons
+              filterButtons.forEach(btn => btn.classList.remove('active'));
+              
+              // Add active class to clicked button
+              this.classList.add('active');
+              
+              // Get tournament ID
+              const tournamentId = this.getAttribute('data-tournament');
+              
+              // Filter players based on tournament
+              filterPlayersByTournament(tournamentId);
+            });
+          });
+        }
+        
+        function filterPlayersByTournament(tournamentId) {
+          // This function will be implemented in leaderboard.js
+          // It will show/hide players based on tournament selection
+          console.log('Filtering by tournament:', tournamentId);
+          
+          // If tournamentId is 'all', show all players
+          // Otherwise, only show players who participated in that tournament
+        }
+        
+        // Initialize when DOM is loaded
+        setupTournamentFilters();
+      });
+    </script>
+  </body>
+</html>
