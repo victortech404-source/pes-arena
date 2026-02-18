@@ -20,6 +20,7 @@
         --neon-green: #00ff88;
         --news-blue: #0088ff;
         --gold: #ffd700;
+        --mpesa: #4caf50;
       }
 
       body {
@@ -167,6 +168,114 @@
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
         gap: 25px;
+      }
+
+      /* Tournament Cards */
+      .tournament-card {
+        background: #181818;
+        border-radius: 16px;
+        border: 1px solid var(--card-border);
+        padding: 20px;
+        position: relative;
+        transition: transform 0.3s ease;
+      }
+
+      .tournament-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--neon-green);
+      }
+
+      .tournament-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 15px;
+      }
+
+      .tournament-name {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #fff;
+        margin-right: 10px;
+      }
+
+      .tournament-status {
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+
+      .status-active {
+        background: rgba(0, 255, 136, 0.2);
+        color: #00ff88;
+      }
+
+      .status-completed {
+        background: rgba(255, 193, 7, 0.2);
+        color: #ffc107;
+      }
+
+      .tournament-details {
+        margin-bottom: 20px;
+      }
+
+      .detail-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .detail-label {
+        color: #888;
+        font-size: 0.9rem;
+      }
+
+      .detail-value {
+        color: #fff;
+        font-weight: 500;
+      }
+
+      .prize-pool {
+        color: var(--gold);
+        font-weight: bold;
+        font-size: 1.1rem;
+      }
+
+      .tournament-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+      }
+
+      .btn-finalize {
+        background: var(--gold);
+        border: none;
+        color: #000;
+        padding: 10px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        flex: 1;
+        transition: transform 0.2s;
+      }
+
+      .btn-finalize:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+      }
+
+      .btn-view-players {
+        background: rgba(0, 136, 255, 0.2);
+        border: 1px solid rgba(0, 136, 255, 0.5);
+        color: #0088ff;
+        padding: 10px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        flex: 1;
       }
 
       /* Match Cards */
@@ -794,6 +903,125 @@
         font-weight: bold;
       }
 
+      /* Payout Modal Specific Styles */
+      .prize-pool-summary {
+        background: linear-gradient(135deg, #1a1a1a, #222);
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 25px;
+        border: 1px solid var(--gold);
+        box-shadow: 0 5px 20px rgba(255, 215, 0, 0.1);
+      }
+
+      .total-collected {
+        text-align: center;
+        font-size: 2rem;
+        font-weight: bold;
+        color: var(--gold);
+        margin-bottom: 5px;
+      }
+
+      .total-label {
+        text-align: center;
+        color: #888;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .breakdown-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+        margin-top: 20px;
+      }
+
+      .breakdown-item {
+        background: #1a1a1a;
+        border-radius: 10px;
+        padding: 15px;
+        text-align: center;
+        border: 1px solid #333;
+      }
+
+      .breakdown-item.gold {
+        border-color: var(--gold);
+      }
+
+      .breakdown-item.silver {
+        border-color: #c0c0c0;
+      }
+
+      .breakdown-item.bronze {
+        border-color: #cd7f32;
+      }
+
+      .place-label {
+        font-size: 0.9rem;
+        color: #888;
+        margin-bottom: 5px;
+      }
+
+      .place-amount {
+        font-size: 1.4rem;
+        font-weight: bold;
+        color: #fff;
+      }
+
+      .place-percent {
+        font-size: 0.8rem;
+        color: #888;
+        margin-top: 5px;
+      }
+
+      .winner-select {
+        background: #1a1a1a;
+        border: 1px solid #333;
+        border-radius: 8px;
+        padding: 12px;
+        color: #fff;
+        width: 100%;
+        margin-bottom: 15px;
+        font-size: 1rem;
+      }
+
+      .winner-select:focus {
+        border-color: var(--gold);
+        outline: none;
+      }
+
+      .warning-box {
+        background: rgba(255, 193, 7, 0.1);
+        border-left: 4px solid #ffc107;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 20px 0;
+      }
+
+      .btn-payout {
+        background: linear-gradient(135deg, #4caf50, #45a049);
+        border: none;
+        color: white;
+        padding: 15px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 1.1rem;
+        width: 100%;
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+
+      .btn-payout:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(76, 175, 80, 0.4);
+      }
+
+      .btn-payout:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+      }
+
       /* Table Styling */
       .player-list-table {
         width: 100%;
@@ -871,6 +1099,9 @@
         }
         .direct-entry-form-group {
           margin-bottom: 20px;
+        }
+        .breakdown-grid {
+          grid-template-columns: 1fr;
         }
       }
     </style>
@@ -1060,72 +1291,72 @@
       </div>
 
       <!-- Direct Entry Tab (Updated with Searchable Dropdowns) -->
-     <div id="tab-direct-entry" class="admin-section">
-  <div class="direct-entry-form">
-    <h3>🎮 Direct Match Entry</h3>
-    <p style="color: #888; margin-bottom: 30px">
-      Submit match results directly. This will bypass the pending approval process.
-    </p>
+      <div id="tab-direct-entry" class="admin-section">
+        <div class="direct-entry-form">
+          <h3>🎮 Direct Match Entry</h3>
+          <p style="color: #888; margin-bottom: 30px">
+            Submit match results directly. This will bypass the pending approval process.
+          </p>
 
-    <div class="player-select-grid">
-      <div class="player-select-box">
-        <h4>Player 1</h4>
-        <div class="direct-entry-form-group">
-          <label>Select Player 1</label>
-          <input type="text" class="admin-search-box" placeholder="🔍 Search GamerTag..." 
-                 onkeyup="filterAdminDropdown(this, 'admin-p1-select')">
-          <select id="admin-p1-select" class="admin-input-field">
-            <option value="">Loading active players...</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Score</label>
-          <div class="score-input">
-            <input type="number" id="admin-p1-score" min="0" max="20" value="0" />
-            <span style="color: #666">goals</span>
+          <div class="player-select-grid">
+            <div class="player-select-box">
+              <h4>Player 1</h4>
+              <div class="direct-entry-form-group">
+                <label>Search Player 1</label>
+                <input type="text" class="admin-search-box" placeholder="🔍 Type to search GamerTag..." 
+                       onkeyup="window.filterAdminDropdown(this, 'admin-p1-select')">
+                <select id="admin-p1-select" class="admin-input-field" size="5">
+                  <option value="">Loading players...</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Score</label>
+                <div class="score-input">
+                  <input type="number" id="admin-p1-score" min="0" max="20" value="0" />
+                  <span style="color: #666">goals</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="player-select-box">
+              <h4>Player 2</h4>
+              <div class="direct-entry-form-group">
+                <label>Search Player 2</label>
+                <input type="text" class="admin-search-box" placeholder="🔍 Type to search GamerTag..." 
+                       onkeyup="window.filterAdminDropdown(this, 'admin-p2-select')">
+                <select id="admin-p2-select" class="admin-input-field" size="5">
+                  <option value="">Loading players...</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Score</label>
+                <div class="score-input">
+                  <input type="number" id="admin-p2-score" min="0" max="20" value="0" />
+                  <span style="color: #666">goals</span>
+                </div>
+              </div>
+            </div>
           </div>
+
+          <div class="vs-separator">VS</div>
+
+          <div class="form-group">
+            <label>Tournament Context</label>
+            <input type="text" id="admin-match-tourney" placeholder="e.g. PES ARENA Pro League / Friendly">
+          </div>
+
+          <button type="button" class="btn btn-primary" style="width: 100%; padding: 15px;"
+                  onclick="window.adminMatches.submitAdminDirectEntry()">
+            ✅ Submit Match Result
+          </button>
+
+          <p style="color: #666; font-size: 0.9rem; margin-top: 15px">
+            ⚠️ This will immediately update both players' stats and global rankings.
+          </p>
         </div>
       </div>
 
-      <div class="player-select-box">
-        <h4>Player 2</h4>
-        <div class="direct-entry-form-group">
-          <label>Select Player 2</label>
-          <input type="text" class="admin-search-box" placeholder="🔍 Search GamerTag..." 
-                 onkeyup="filterAdminDropdown(this, 'admin-p2-select')">
-          <select id="admin-p2-select" class="admin-input-field">
-            <option value="">Loading active players...</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Score</label>
-          <div class="score-input">
-            <input type="number" id="admin-p2-score" min="0" max="20" value="0" />
-            <span style="color: #666">goals</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="vs-separator">VS</div>
-
-    <div class="form-group">
-      <label>Tournament Context</label>
-      <input type="text" id="admin-match-tourney" placeholder="e.g. PES ARENA Pro League / Friendly">
-    </div>
-
-    <button type="button" class="btn btn-primary" style="width: 100%; padding: 15px;"
-            onclick="window.adminMatches.submitAdminDirectEntry()">
-      ✅ Submit Match Result
-    </button>
-
-    <p style="color: #666; font-size: 0.9rem; margin-top: 15px">
-      ⚠️ This will immediately update both players' stats and global rankings.
-    </p>
-  </div>
-</div>
-
-      <!-- Create Tournament Tab -->
+      <!-- Create Tournament Tab (Updated with Prize Description and WhatsApp Link) -->
       <div id="tab-create" class="admin-section">
         <div
           style="
@@ -1176,6 +1407,24 @@
                 <label>Prize Pool</label
                 ><input type="text" id="t-prize" placeholder="e.g. KES 5,000" />
               </div>
+              
+              <!-- Prize Pool Description (New) -->
+              <div class="form-group">
+                <label for="t-prize-description">Prize Pool Description (Optional)</label>
+                <textarea id="t-prize-description" rows="2" placeholder="e.g., Cash prize + Trophy + Gaming accessories" class="form-control"></textarea>
+                <small class="form-text text-muted">Provide details about what winners receive</small>
+              </div>
+              
+              <!-- WhatsApp Group Link (New - Required if prize pool exists) -->
+              <div class="form-group">
+                <label for="t-whatsapp-link">WhatsApp Group Link <span id="whatsapp-required-indicator" style="color: #ffaa00; display: none;">(Required if Prize Pool)</span></label>
+                <input type="url" id="t-whatsapp-link" placeholder="https://chat.whatsapp.com/..." class="form-control">
+                <small class="form-text text-muted">
+                  ⚠️ <strong>Required if Prize Pool is set</strong> - Used to contact winners<br>
+                  Create a WhatsApp group and paste the invite link here
+                </small>
+              </div>
+              
               <div class="form-group">
                 <label>External Link (Easy Tournament)</label
                 ><input type="url" id="t-link" placeholder="https://..." />
@@ -1514,6 +1763,122 @@
       </div>
     </div>
 
+    <!-- Payout Modal (New - Finalize & Pay) -->
+    <div id="payout-modal" class="custom-modal-overlay">
+      <div class="modal-box" style="max-width: 600px">
+        <div class="modal-header">
+          <h3 style="color: var(--gold)">🏆 Finalize Tournament & Pay Winners</h3>
+          <button onclick="window.adminTournaments.closePayoutModal()" class="btn-close-modal">
+            ×
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <input type="hidden" id="payout-tournament-id">
+          
+          <!-- Prize Pool Summary -->
+          <div class="prize-pool-summary">
+            <div class="total-collected" id="total-prize-pool">KES 0</div>
+            <div class="total-label">Total Prize Pool</div>
+            
+            <!-- Prize Breakdown Preview -->
+            <div class="breakdown-grid" id="prize-breakdown-preview">
+              <div class="breakdown-item gold">
+                <div class="place-label">🥇 1st Place</div>
+                <div class="place-amount" id="first-place-amount">KES 0</div>
+                <div class="place-percent" id="first-place-percent">(50%)</div>
+              </div>
+              <div class="breakdown-item silver">
+                <div class="place-label">🥈 2nd Place</div>
+                <div class="place-amount" id="second-place-amount">KES 0</div>
+                <div class="place-percent" id="second-place-percent">(30%)</div>
+              </div>
+              <div class="breakdown-item bronze">
+                <div class="place-label">🥉 3rd Place</div>
+                <div class="place-amount" id="third-place-amount">KES 0</div>
+                <div class="place-percent" id="third-place-percent">(20%)</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Winner Selection -->
+          <h4 style="margin: 20px 0 15px; color: #fff;">Select Winners</h4>
+          
+          <div class="form-group">
+            <label>🥇 1st Place Winner *</label>
+            <select id="winner-1st" class="winner-select" onchange="window.adminTournaments.updatePayoutPreview()">
+              <option value="">Select 1st place winner...</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>🥈 2nd Place Winner *</label>
+            <select id="winner-2nd" class="winner-select" onchange="window.adminTournaments.updatePayoutPreview()">
+              <option value="">Select 2nd place winner...</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>🥉 3rd Place Winner *</label>
+            <select id="winner-3rd" class="winner-select" onchange="window.adminTournaments.updatePayoutPreview()">
+              <option value="">Select 3rd place winner...</option>
+            </select>
+          </div>
+
+          <!-- WhatsApp Group Section -->
+          <div class="warning-box">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+              <span style="font-size: 1.5rem;">📱</span>
+              <div>
+                <strong style="color: #ffc107;">WhatsApp Group Required</strong>
+                <p style="color: #aaa; font-size: 0.9rem; margin: 5px 0 0;">
+                  Winners will be added to this group for payment coordination
+                </p>
+              </div>
+            </div>
+            <input type="url" id="payout-whatsapp-link" class="form-control" 
+                   placeholder="https://chat.whatsapp.com/..." required>
+          </div>
+
+          <!-- Double Confirmation Section -->
+          <div class="warning-box" style="border-left-color: #ff4444;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="color: #ff4444; font-size: 1.2rem;">⚠️</span>
+              <div>
+                <strong style="color: #ff4444;">Double Confirmation Required</strong>
+                <p style="color: #aaa; font-size: 0.9rem; margin: 5px 0 0;">
+                  This action will mark the tournament as completed and initiate M-Pesa payouts to the selected winners.
+                  This cannot be undone.
+                </p>
+              </div>
+            </div>
+            
+            <div style="margin-top: 15px;">
+              <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                <input type="checkbox" id="confirm-winners" onchange="window.adminTournaments.togglePayoutButton()">
+                <span style="color: #fff;">I confirm that the selected winners are correct</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; margin-top: 10px;">
+                <input type="checkbox" id="confirm-payment" onchange="window.adminTournaments.togglePayoutButton()">
+                <span style="color: #fff;">I understand that this will initiate real M-Pesa payments</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button
+            id="process-payout-btn"
+            class="btn-payout"
+            onclick="window.adminTournaments.processPayouts()"
+            disabled
+          >
+            💸 Authorize M-Pesa Payouts
+          </button>
+        </div>
+      </div>
+    </div>
+
     <footer class="footer">
       <div class="container">
         <div class="footer-bottom">
@@ -1530,6 +1895,7 @@
     <script src="js/admin-core.js"></script>
     <script src="js/admin-matches.js"></script>
     <script src="js/admin-users.js"></script>
+    <script src="js/admin-tournaments.js"></script>
     
     <script>
       // Helper function to filter dropdown options
@@ -1547,6 +1913,25 @@
           }
         }
       }
+
+      // WhatsApp link required indicator
+      document.addEventListener('DOMContentLoaded', function() {
+        const prizeInput = document.getElementById('t-prize');
+        if (prizeInput) {
+          prizeInput.addEventListener('input', function() {
+            const whatsappRequired = document.getElementById('whatsapp-required-indicator');
+            const whatsappInput = document.getElementById('t-whatsapp-link');
+            
+            if (this.value && this.value.trim() !== '') {
+              whatsappRequired.style.display = 'inline';
+              whatsappInput.setAttribute('required', 'required');
+            } else {
+              whatsappRequired.style.display = 'none';
+              whatsappInput.removeAttribute('required');
+            }
+          });
+        }
+      });
     </script>
   </body>
 </html>

@@ -13,6 +13,43 @@ class AdminMatches {
         
         // Add filter buttons if they don't exist
         this.addMatchFilters();
+        
+        // Load all players with gamerTags when admin page loads
+        this.loadAllPlayers();
+    }
+
+    // Load all users with gamerTags from Firestore
+    async loadAllPlayers() {
+        try {
+            console.log("Loading all players with gamerTags...");
+            const snapshot = await this.db.collection('users')
+                .where('gamerTag', '!=', null)
+                .get();
+            
+            this.allPlayers = [];
+            snapshot.forEach(doc => {
+                const user = doc.data();
+                if (user.gamerTag && user.gamerTag.trim() !== '') {
+                    this.allPlayers.push({
+                        id: doc.id,
+                        gamerTag: user.gamerTag,
+                        fullName: user.fullName || 'Unknown',
+                        displayName: user.displayName || user.fullName || 'Unknown'
+                    });
+                }
+            });
+            
+            // Sort players by gamerTag
+            this.allPlayers.sort((a, b) => a.gamerTag.localeCompare(b.gamerTag));
+            
+            console.log(`Loaded ${this.allPlayers.length} players with gamerTags`);
+            
+            // Populate the dropdowns
+            this.populateDirectEntryPlayers();
+            
+        } catch (error) {
+            console.error("Error loading players:", error);
+        }
     }
 
     // Add filter buttons for match results
@@ -345,10 +382,10 @@ class AdminMatches {
                 // 8. Update match record with approval timestamp and status
                 t.update(matchRef, { 
                     status: 'approved',
-                    approvedAt: firebase.firestore.FieldValue.serverTimestamp(), // Ensures Match of the Day updates
+                    approvedAt: firebase.firestore.FieldValue.serverTimestamp(),
                     approvalTimestamp: firebase.firestore.FieldValue.serverTimestamp(),
                     approvedBy: window.adminManager.adminEmail,
-                    disputeReason: null, // Clear dispute reason if it exists
+                    disputeReason: null,
                     isDisputed: false
                 });
             });
@@ -379,7 +416,7 @@ class AdminMatches {
                     status: 'rejected',
                     rejectedAt: firebase.firestore.FieldValue.serverTimestamp(),
                     approvalTimestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                    disputeReason: null, // Clear dispute reason if it exists
+                    disputeReason: null,
                     isDisputed: false
                 });
                 this.loadMatchResults();
@@ -568,18 +605,18 @@ class AdminMatches {
                 // Calculate new stats for both players
                 const userNewStats = calculateNewStats(
                     userData,
-                    matchData.myScore,    // Old scored
-                    matchData.oppScore,   // Old conceded
-                    p1Score,              // New scored
-                    p2Score               // New conceded
+                    matchData.myScore,
+                    matchData.oppScore,
+                    p1Score,
+                    p2Score
                 );
                 
                 const oppNewStats = calculateNewStats(
                     oppData,
-                    matchData.oppScore,   // Old scored
-                    matchData.myScore,    // Old conceded
-                    p2Score,              // New scored
-                    p1Score               // New conceded
+                    matchData.oppScore,
+                    matchData.myScore,
+                    p2Score,
+                    p1Score
                 );
                 
                 // Update players
@@ -590,7 +627,7 @@ class AdminMatches {
                 t.update(matchRef, {
                     myScore: p1Score,
                     oppScore: p2Score,
-                    status: 'approved', // Mark as approved after correction
+                    status: 'approved',
                     approvedAt: firebase.firestore.FieldValue.serverTimestamp(),
                     approvalTimestamp: firebase.firestore.FieldValue.serverTimestamp(),
                     approvedBy: window.adminManager.adminEmail,
@@ -621,60 +658,39 @@ class AdminMatches {
 
     // --- DIRECT ENTRY TAB FUNCTIONS ---
     
-    // IMPROVED: Fetch only approved tournament participants for direct entry
+    // Populate dropdowns with all players who have gamerTags
     async populateDirectEntryPlayers() {
-    // Select the dropdown elements
-    const p1Select = document.getElementById('admin-p1-select');
-    const p2Select = document.getElementById('admin-p2-select');
-    
-    if (!p1Select || !p2Select) return;
+        const p1Select = document.getElementById('admin-p1-select');
+        const p2Select = document.getElementById('admin-p2-select');
+        
+        if (!p1Select || !p2Select) return;
 
-    try {
-        // Fetch only players with 'approved' tournament registrations
-        const snapshot = await this.db.collection('tournamentRegistrations')
-            .where('status', '==', 'approved')
-            .get();
-
-        if (snapshot.empty) {
-            p1Select.innerHTML = '<option value="">No active players found</option>';
-            p2Select.innerHTML = '<option value="">No active players found</option>';
-            return;
-        }
-
-        // Map unique players to avoid duplicates if they are in multiple tournaments
-        const activePlayersMap = new Map();
-        snapshot.forEach(doc => {
-            const data = doc.data();
-            // Ensure we have both a tag and an ID
-            if (data.userId && data.gamerTag) {
-                activePlayersMap.set(data.userId, {
-                    id: data.userId,
-                    tag: data.gamerTag,
-                    name: data.userDisplayName || 'Unknown'
-                });
+        try {
+            if (this.allPlayers.length === 0) {
+                p1Select.innerHTML = '<option value="">No players found</option>';
+                p2Select.innerHTML = '<option value="">No players found</option>';
+                return;
             }
-        });
 
-        // Sort players alphabetically by GamerTag
-        const sortedPlayers = Array.from(activePlayersMap.values())
-            .sort((a, b) => a.tag.localeCompare(b.tag));
+            // Generate HTML options
+            const optionsHtml = this.allPlayers.map(p => 
+                `<option value="${p.id}" data-tag="${p.gamerTag}">@${p.gamerTag} (${p.fullName})</option>`
+            ).join('');
 
-        // Generate HTML options
-        const optionsHtml = sortedPlayers.map(p => 
-            `<option value="${p.id}" data-tag="${p.tag}">${p.tag} (${p.name})</option>`
-        ).join('');
+            const placeholder = '<option value="">Select a player...</option>';
+            p1Select.innerHTML = placeholder + optionsHtml;
+            p2Select.innerHTML = placeholder + optionsHtml;
 
-        const placeholder = '<option value="">Select a Legend...</option>';
-        p1Select.innerHTML = placeholder + optionsHtml;
-        p2Select.innerHTML = placeholder + optionsHtml;
+            console.log(`Populated dropdowns with ${this.allPlayers.length} players`);
 
-    } catch (error) {
-        console.error("Error loading tournament players:", error);
-        p1Select.innerHTML = '<option value="">Error loading players</option>';
+        } catch (error) {
+            console.error("Error populating player dropdowns:", error);
+            p1Select.innerHTML = '<option value="">Error loading players</option>';
+            p2Select.innerHTML = '<option value="">Error loading players</option>';
+        }
     }
-}
 
-    // NEW FUNCTION: Submit admin direct entry match (with auto-approval)
+    // Submit admin direct entry match (with auto-approval)
     async submitAdminDirectEntry() {
         const p1Id = document.getElementById('admin-p1-select').value;
         const p2Id = document.getElementById('admin-p2-select').value;
@@ -692,24 +708,33 @@ class AdminMatches {
             return;
         }
 
+        // Validate that both selected players exist in the allPlayers array
+        const p1Exists = this.allPlayers.some(p => p.id === p1Id);
+        const p2Exists = this.allPlayers.some(p => p.id === p2Id);
+        
+        if (!p1Exists || !p2Exists) {
+            Swal.fire('Error', 'One or both selected players do not exist in the database.', 'error');
+            return;
+        }
+
         try {
             Swal.fire({ title: 'Submitting...', didOpen: () => Swal.showLoading() });
 
-            // Use the gamerTags from the options for the match record
-            const p1Tag = document.querySelector(`#admin-p1-select option[value="${p1Id}"]`).dataset.tag;
-            const p2Tag = document.querySelector(`#admin-p2-select option[value="${p2Id}"]`).dataset.tag;
+            // Get player details from allPlayers array
+            const p1Data = this.allPlayers.find(p => p.id === p1Id);
+            const p2Data = this.allPlayers.find(p => p.id === p2Id);
 
             const matchData = {
                 userId: p1Id,
-                userTag: p1Tag,
-                userDisplayName: 'Admin Entry', // Can be enhanced if we have user data
+                userTag: p1Data.gamerTag,
+                userDisplayName: p1Data.fullName,
                 opponentId: p2Id,
-                opponentTag: p2Tag,
-                opponentDisplayName: 'Admin Entry', // Can be enhanced if we have user data
+                opponentTag: p2Data.gamerTag,
+                opponentDisplayName: p2Data.fullName,
                 myScore: Number(p1Score),
                 oppScore: Number(p2Score),
                 tournamentName: tournament || 'Admin Direct Entry',
-                status: 'approved', // Auto-approved by admin
+                status: 'approved',
                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                 approvedAt: firebase.firestore.FieldValue.serverTimestamp(),
                 approvalTimestamp: firebase.firestore.FieldValue.serverTimestamp(),
@@ -805,8 +830,13 @@ class AdminMatches {
             // Reset form
             document.getElementById('admin-p1-select').value = '';
             document.getElementById('admin-p2-select').value = '';
-            document.getElementById('admin-p1-score').value = '';
-            document.getElementById('admin-p2-score').value = '';
+            document.getElementById('admin-p1-score').value = '0';
+            document.getElementById('admin-p2-score').value = '0';
+            document.getElementById('admin-match-tourney').value = '';
+            
+            // Clear search boxes
+            const searchBoxes = document.querySelectorAll('.admin-search-box');
+            searchBoxes.forEach(box => box.value = '');
             
             Swal.fire('Success', 'Match recorded. Player stats have been updated.', 'success');
             
@@ -816,310 +846,6 @@ class AdminMatches {
         } catch (e) {
             console.error('Error submitting admin direct entry:', e);
             Swal.fire('Error', e.message, 'error');
-        }
-    }
-
-    async populatePlayerDropdowns() {
-        const p1Select = document.getElementById('direct-p1-select');
-        const p2Select = document.getElementById('direct-p2-select');
-        
-        if (!p1Select || !p2Select) return;
-        
-        try {
-            // Show loading
-            p1Select.innerHTML = '<option value="">Loading players...</option>';
-            p2Select.innerHTML = '<option value="">Loading players...</option>';
-            
-            const snapshot = await this.db.collection('users')
-                .orderBy('gamerTag')
-                .get();
-            
-            this.allPlayers = [];
-            snapshot.forEach(doc => {
-                const user = doc.data();
-                this.allPlayers.push({
-                    id: doc.id,
-                    gamerTag: user.gamerTag,
-                    fullName: user.fullName || 'Unknown'
-                });
-            });
-            
-            // Populate dropdowns
-            let p1Options = '<option value="">Select Player 1...</option>';
-            let p2Options = '<option value="">Select Player 2...</option>';
-            
-            this.allPlayers.forEach(player => {
-                const option = `<option value="${player.id}">@${player.gamerTag} (${player.fullName})</option>`;
-                p1Options += option;
-                p2Options += option;
-            });
-            
-            p1Select.innerHTML = p1Options;
-            p2Select.innerHTML = p2Options;
-            
-            console.log(`Loaded ${this.allPlayers.length} players for dropdowns`);
-            
-        } catch (error) {
-            console.error('Error loading players:', error);
-            p1Select.innerHTML = '<option value="">Error loading players</option>';
-            p2Select.innerHTML = '<option value="">Error loading players</option>';
-        }
-    }
-
-    updatePlayerName(playerId, targetElementId) {
-        if (!playerId) {
-            document.getElementById(targetElementId).textContent = 'No player selected';
-            document.getElementById(targetElementId.replace('name', 'id')).value = '';
-            return;
-        }
-        
-        const player = this.allPlayers.find(p => p.id === playerId);
-        if (player) {
-            document.getElementById(targetElementId).textContent = 
-                `${player.fullName} (@${player.gamerTag})`;
-            document.getElementById(targetElementId.replace('name', 'id')).value = playerId;
-        }
-    }
-
-    async loadTournamentsForDirectEntry() {
-        const tournamentSelect = document.getElementById('direct-tournament');
-        if (!tournamentSelect) return;
-        
-        try {
-            tournamentSelect.innerHTML = '<option value="friendly">Friendly Match</option><option value="">Loading tournaments...</option>';
-            
-            const snapshot = await this.db.collection('tournaments')
-                .where('status', '==', 'active')
-                .orderBy('createdAt', 'desc')
-                .get();
-            
-            this.tournaments = [];
-            snapshot.forEach(doc => {
-                const tournament = doc.data();
-                this.tournaments.push({
-                    id: doc.id,
-                    name: tournament.name
-                });
-            });
-            
-            let options = '<option value="friendly">Friendly Match</option>';
-            this.tournaments.forEach(tournament => {
-                options += `<option value="${tournament.id}">${tournament.name}</option>`;
-            });
-            
-            tournamentSelect.innerHTML = options;
-            
-        } catch (error) {
-            console.error('Error loading tournaments:', error);
-            tournamentSelect.innerHTML = '<option value="friendly">Friendly Match</option><option value="">Error loading tournaments</option>';
-        }
-    }
-
-    validateScore(input) {
-        let value = parseInt(input.value);
-        if (value < 0) value = 0;
-        if (value > 20) value = 20; // Reasonable max
-        input.value = value;
-    }
-
-    async submitDirectMatch() {
-        // Get form values
-        const p1Id = document.getElementById('p1-id').value;
-        const p1Score = parseInt(document.getElementById('direct-p1-score').value) || 0;
-        const p2Id = document.getElementById('p2-id').value;
-        const p2Score = parseInt(document.getElementById('direct-p2-score').value) || 0;
-        const tournamentId = document.getElementById('direct-tournament').value;
-        const matchDate = document.getElementById('direct-match-date').value;
-        const notes = document.getElementById('direct-match-notes').value;
-        
-        // Validation
-        if (!p1Id || !p2Id) {
-            Swal.fire('Error', 'Please select both players.', 'error');
-            return;
-        }
-        
-        if (p1Id === p2Id) {
-            Swal.fire('Error', 'Players cannot play against themselves.', 'error');
-            return;
-        }
-        
-        if (p1Score < 0 || p2Score < 0) {
-            Swal.fire('Error', 'Scores cannot be negative.', 'error');
-            return;
-        }
-        
-        // Get player details
-        const p1Data = this.allPlayers.find(p => p.id === p1Id);
-        const p2Data = this.allPlayers.find(p => p.id === p2Id);
-        
-        if (!p1Data || !p2Data) {
-            Swal.fire('Error', 'Could not find player data.', 'error');
-            return;
-        }
-        
-        // Get tournament name
-        let tournamentName = 'Friendly Match';
-        if (tournamentId && tournamentId !== 'friendly') {
-            const tournament = this.tournaments.find(t => t.id === tournamentId);
-            if (tournament) {
-                tournamentName = tournament.name;
-            }
-        }
-        
-        // Confirmation
-        const confirmation = await Swal.fire({
-            title: 'Submit Direct Match?',
-            html: `
-                <div style="text-align: left; margin: 20px 0;">
-                    <p><strong>Player 1:</strong> @${p1Data.gamerTag} (${p1Data.fullName})</p>
-                    <p><strong>Player 2:</strong> @${p2Data.gamerTag} (${p2Data.fullName})</p>
-                    <p><strong>Score:</strong> ${p1Score} - ${p2Score}</p>
-                    <p><strong>Tournament:</strong> ${tournamentName}</p>
-                </div>
-                <p style="color: #ff9800; font-weight: bold;">
-                    ⚠️ This will immediately update both players' stats!
-                </p>
-            `,
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, Submit Match',
-            cancelButtonText: 'Cancel',
-            confirmButtonColor: '#00ff88'
-        });
-        
-        if (!confirmation.isConfirmed) return;
-        
-        try {
-            // Create match record
-            const matchData = {
-                userId: p1Id,
-                userTag: p1Data.gamerTag,
-                userDisplayName: p1Data.fullName,
-                opponentId: p2Id,
-                opponentTag: p2Data.gamerTag,
-                opponentDisplayName: p2Data.fullName,
-                myScore: p1Score,
-                oppScore: p2Score,
-                tournamentId: tournamentId === 'friendly' ? '' : tournamentId,
-                tournamentName: tournamentName,
-                status: 'approved', // Direct entry bypasses pending
-                timestamp: matchDate ? firebase.firestore.Timestamp.fromDate(new Date(matchDate)) : firebase.firestore.FieldValue.serverTimestamp(),
-                approvedAt: firebase.firestore.FieldValue.serverTimestamp(),
-                approvalTimestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                approvedBy: window.adminManager.adminEmail,
-                notes: notes,
-                isDirectEntry: true,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            };
-            
-            // Use transaction to update both players' stats and create match record
-            await this.db.runTransaction(async (t) => {
-                // Get player documents
-                const p1Ref = this.db.collection('users').doc(p1Id);
-                const p2Ref = this.db.collection('users').doc(p2Id);
-                
-                const p1Doc = await t.get(p1Ref);
-                const p2Doc = await t.get(p2Ref);
-                
-                if (!p1Doc.exists || !p2Doc.exists) {
-                    throw "One or both players not found!";
-                }
-                
-                const p1Data = p1Doc.data();
-                const p2Data = p2Doc.data();
-                
-                // Helper function to update stats (same as approveMatch)
-                const updateStats = (currentData, isWinner, isDraw, myGoals, oppGoals) => {
-                    let wins = currentData.wins || 0;
-                    let losses = currentData.losses || 0;
-                    let draws = currentData.draws || 0;
-                    let streak = currentData.winStreak || 0;
-                    
-                    // Goals tracking
-                    let goalsScored = (currentData.goalsScored || 0) + myGoals;
-                    let goalsConceded = (currentData.goalsConceded || 0) + oppGoals;
-                    
-                    // Matches played
-                    let matchesPlayed = (currentData.matchesPlayed || 0) + 1;
-                    
-                    // Clean sheets
-                    let cleanSheets = currentData.cleanSheets || 0;
-                    if (oppGoals === 0) {
-                        cleanSheets++;
-                    }
-
-                    if (isDraw) {
-                        draws++;
-                        streak = 0;
-                    } else if (isWinner) {
-                        wins++;
-                        streak++;
-                    } else {
-                        losses++;
-                        streak = 0;
-                    }
-
-                    const total = wins + losses + draws;
-                    const winRate = total > 0 ? Math.round((wins / total) * 100) : 0;
-                    
-                    // Calculate goal difference
-                    const goalDifference = goalsScored - goalsConceded;
-
-                    return { 
-                        wins, 
-                        losses, 
-                        draws, 
-                        winRate, 
-                        winStreak: streak,
-                        goalsScored,
-                        goalsConceded,
-                        goalDifference,
-                        cleanSheets,
-                        matchesPlayed
-                    };
-                };
-                
-                // Determine results
-                const isDraw = (p1Score === p2Score);
-                const p1Won = (p1Score > p2Score);
-                
-                // Calculate new stats
-                const p1NewStats = updateStats(p1Data, p1Won, isDraw, p1Score, p2Score);
-                const p2NewStats = updateStats(p2Data, !p1Won, isDraw, p2Score, p1Score);
-                
-                // Update player stats
-                t.update(p1Ref, p1NewStats);
-                t.update(p2Ref, p2NewStats);
-                
-                // Create match record
-                const matchRef = this.db.collection('matches').doc();
-                t.set(matchRef, matchData);
-            });
-            
-            // Reset form
-            document.getElementById('direct-p1-select').value = '';
-            document.getElementById('direct-p2-select').value = '';
-            document.getElementById('p1-name').textContent = 'No player selected';
-            document.getElementById('p2-name').textContent = 'No player selected';
-            document.getElementById('direct-p1-score').value = 0;
-            document.getElementById('direct-p2-score').value = 0;
-            document.getElementById('direct-match-date').value = '';
-            document.getElementById('direct-match-notes').value = '';
-            
-            Swal.fire({
-                icon: 'success',
-                title: 'Match Submitted!',
-                text: 'Match result has been recorded and player stats updated.',
-                timer: 2000,
-                showConfirmButton: false
-            });
-            
-            // Refresh dashboard stats
-            window.adminManager.loadDashboardStats();
-            
-        } catch (error) {
-            console.error('Error submitting direct match:', error);
-            Swal.fire('Error', 'Failed to submit match: ' + error.message, 'error');
         }
     }
 }

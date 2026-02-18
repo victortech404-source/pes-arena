@@ -15,6 +15,21 @@ service cloud.firestore {
              get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isOrganizer == true;
     }
     
+    function isModerator() {
+      return isAuthenticated() && 
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'moderator';
+    }
+    
+    function isBoardMember() {
+      return isAuthenticated() && (
+        isSuperAdmin() ||
+        isModerator() ||
+        isOrganizer() ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'superAdmin' ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'boardMember'
+      );
+    }
+    
     function isTournamentOrganizer(tournamentId) {
       return isAuthenticated() && 
              get(/databases/$(database)/documents/tournaments/$(tournamentId)).data.organizerId == request.auth.uid;
@@ -119,6 +134,19 @@ service cloud.firestore {
       
       // Only super admin can delete registrations
       allow delete: if isSuperAdmin();
+    }
+    
+    // Boardroom Messages collection - STRICTLY PROTECTED
+    match /boardroom_messages/{messageId} {
+      // Allow read access ONLY to board members (superAdmin, moderator, organizer, boardMember)
+      allow read: if isBoardMember();
+      
+      // Allow write access ONLY to board members
+      allow write: if isBoardMember();
+      
+      // Explicit deny for everyone else (including default players)
+      // This is enforced by the above rules, but we make it explicit
+      allow read, write: if false; // Explicit deny for non-board members
     }
   }
 }

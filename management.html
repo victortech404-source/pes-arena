@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Empty favicon to prevent console errors -->
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+
+    <title>My Managed Arenas - PES ARENA</title>
+    <meta name="description" content="Manage your tournaments on PES ARENA" />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/variables.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+
+    <!-- Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* Management Page Specific Styles */
+      :root {
+        --management-primary: #00ff88;
+        --management-secondary: #00cc6a;
+        --management-bg: rgba(0, 255, 136, 0.05);
+      }
+
+      .management-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+
+      .management-header h1 {
+        font-size: 2rem;
+        background: linear-gradient(135deg, #fff, #00ff88);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin: 0;
+      }
+
+      .create-tournament-btn {
+        background: linear-gradient(135deg, #00ff88, #00cc6a);
+        color: #1a1a2e;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+      }
+
+      .create-tournament-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(0, 255, 136, 0.3);
+      }
+
+      /* Tournament Cards Grid */
+      .tournament-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 25px;
+        margin-bottom: 40px;
+      }
+
+      .tournament-card {
+        background: var(--card-bg);
+        border-radius: 12px;
+        padding: 20px;
+        border: 1px solid rgba(0, 255, 136, 0.2);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .tournament-card:hover {
+        transform: translateY(-5px);
+        border-color: #00ff88;
+        box-shadow: 0 10px 30px rgba(0, 255, 136, 0.15);
+      }
+
+      .tournament-card.selected {
+        border: 2px solid #00ff88;
+        box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+      }
+
+      .tournament-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(90deg, transparent, #00ff88, transparent);
+        transition: left 0.5s ease;
+      }
+
+      .tournament-card:hover::before {
+        left: 100%;
+      }
+
+      .tournament-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+      }
+
+      .tournament-name {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #fff;
+      }
+
+      .tournament-status {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .status-pending {
+        background: rgba(255, 193, 7, 0.2);
+        color: #ffc107;
+        border: 1px solid #ffc107;
+      }
+
+      .status-active {
+        background: rgba(0, 255, 136, 0.2);
+        color: #00ff88;
+        border: 1px solid #00ff88;
+      }
+
+      .status-finished {
+        background: rgba(108, 117, 125, 0.2);
+        color: #6c757d;
+        border: 1px solid #6c757d;
+      }
+
+      .tournament-details {
+        margin: 15px 0;
+        font-size: 0.9rem;
+      }
+
+      .tournament-details p {
+        margin: 8px 0;
+        color: var(--text-secondary);
+      }
+
+      .tournament-details i {
+        color: #00ff88;
+        margin-right: 8px;
+        width: 20px;
+        display: inline-block;
+      }
+
+      .tournament-stats {
+        display: flex;
+        justify-content: space-between;
+        padding-top: 15px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+      }
+
+      /* Management Tools Section */
+      .management-tools {
+        background: rgba(0, 255, 136, 0.02);
+        border-radius: 16px;
+        padding: 30px;
+        margin-top: 30px;
+        border: 1px solid rgba(0, 255, 136, 0.1);
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.5s ease;
+        display: none;
+      }
+
+      .management-tools.visible {
+        opacity: 1;
+        transform: translateY(0);
+        display: block;
+      }
+
+      .tools-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        flex-wrap: wrap;
+        gap: 15px;
+      }
+
+      .tools-header h2 {
+        margin: 0;
+        font-size: 1.5rem;
+        color: #00ff88;
+      }
+
+      .selected-tournament-badge {
+        background: rgba(0, 255, 136, 0.1);
+        padding: 8px 16px;
+        border-radius: 8px;
+        border: 1px solid #00ff88;
+        color: #00ff88;
+        font-size: 0.9rem;
+      }
+
+      /* Players Table */
+      .players-table-container {
+        overflow-x: auto;
+        margin: 25px 0;
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 12px;
+        padding: 20px;
+      }
+
+      .players-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .players-table th {
+        text-align: left;
+        padding: 12px;
+        color: #00ff88;
+        font-weight: 600;
+        border-bottom: 2px solid #00ff88;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .players-table td {
+        padding: 12px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        color: var(--text-secondary);
+      }
+
+      .players-table tr:hover td {
+        background: rgba(0, 255, 136, 0.05);
+        color: #fff;
+      }
+
+      .player-status {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+
+      .status-confirmed {
+        background: rgba(0, 255, 136, 0.2);
+        color: #00ff88;
+      }
+
+      .status-pending {
+        background: rgba(255, 193, 7, 0.2);
+        color: #ffc107;
+      }
+
+      /* WhatsApp Link Editor */
+      .whatsapp-editor {
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 12px;
+        padding: 20px;
+        margin: 25px 0;
+      }
+
+      .whatsapp-editor label {
+        display: block;
+        margin-bottom: 10px;
+        color: #00ff88;
+        font-weight: 600;
+      }
+
+      .whatsapp-input-group {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .whatsapp-input-group input {
+        flex: 1;
+        min-width: 250px;
+        padding: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(0, 255, 136, 0.3);
+        border-radius: 8px;
+        color: #fff;
+        font-size: 0.9rem;
+      }
+
+      .whatsapp-input-group input:focus {
+        outline: none;
+        border-color: #00ff88;
+      }
+
+      .whatsapp-input-group button {
+        padding: 12px 24px;
+        background: linear-gradient(135deg, #00ff88, #00cc6a);
+        color: #1a1a2e;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .whatsapp-input-group button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
+      }
+
+      .current-link {
+        margin-top: 10px;
+        padding: 10px;
+        background: rgba(0, 255, 136, 0.05);
+        border-radius: 6px;
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        word-break: break-all;
+      }
+
+      .current-link a {
+        color: #00ff88;
+        text-decoration: none;
+      }
+
+      .current-link a:hover {
+        text-decoration: underline;
+      }
+
+      /* Action Buttons */
+      .action-buttons {
+        display: flex;
+        gap: 15px;
+        margin: 25px 0;
+        flex-wrap: wrap;
+      }
+
+      .action-btn {
+        padding: 12px 24px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #00ff88, #00cc6a);
+        color: #1a1a2e;
+      }
+
+      .btn-warning {
+        background: rgba(255, 193, 7, 0.2);
+        color: #ffc107;
+        border: 1px solid #ffc107;
+      }
+
+      .btn-danger {
+        background: rgba(220, 53, 69, 0.2);
+        color: #dc3545;
+        border: 1px solid #dc3545;
+      }
+
+      .btn-success {
+        background: rgba(0, 255, 136, 0.2);
+        color: #00ff88;
+        border: 1px solid #00ff88;
+      }
+
+      .action-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 255, 136, 0.2);
+      }
+
+      .action-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      /* Broadcast Section */
+      .broadcast-section {
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 12px;
+        padding: 20px;
+        margin: 25px 0;
+      }
+
+      .broadcast-section h3 {
+        color: #00ff88;
+        margin-bottom: 15px;
+      }
+
+      .broadcast-input-group {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .broadcast-input-group textarea {
+        flex: 1;
+        min-width: 300px;
+        padding: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(0, 255, 136, 0.3);
+        border-radius: 8px;
+        color: #fff;
+        font-size: 0.9rem;
+        resize: vertical;
+        min-height: 80px;
+      }
+
+      .broadcast-input-group textarea:focus {
+        outline: none;
+        border-color: #00ff88;
+      }
+
+      .broadcast-input-group button {
+        padding: 12px 24px;
+        background: linear-gradient(135deg, #00ff88, #00cc6a);
+        color: #1a1a2e;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        align-self: flex-end;
+      }
+
+      .broadcast-input-group button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
+      }
+
+      /* Loading and Empty States */
+      .loading-spinner {
+        text-align: center;
+        padding: 50px;
+        color: #00ff88;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        background: rgba(0, 255, 136, 0.02);
+        border-radius: 12px;
+        border: 1px dashed rgba(0, 255, 136, 0.3);
+      }
+
+      .empty-state-icon {
+        font-size: 4rem;
+        margin-bottom: 20px;
+        opacity: 0.5;
+      }
+
+      .empty-state h3 {
+        color: #fff;
+        margin-bottom: 10px;
+      }
+
+      .empty-state p {
+        color: var(--text-secondary);
+        margin-bottom: 20px;
+      }
+
+      /* Notification Toast */
+      .toast-notification {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #1a1a2e;
+        border-left: 4px solid #00ff88;
+        padding: 16px 24px;
+        border-radius: 8px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        transform: translateX(400px);
+        transition: transform 0.3s ease;
+        z-index: 1000;
+      }
+
+      .toast-notification.show {
+        transform: translateX(0);
+      }
+
+      .toast-content {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .toast-icon {
+        color: #00ff88;
+        font-size: 1.2rem;
+      }
+
+      .toast-message {
+        color: #fff;
+      }
+    </style>
+
+    <!-- Security Redirect Script -->
+    <script>
+      (async function() {
+        // Redirect if not logged in or not an organizer
+        if (typeof firebase === 'undefined') {
+          window.location.href = 'index.html';
+          return;
+        }
+
+        try {
+          await new Promise((resolve) => {
+            firebase.auth().onAuthStateChanged(async (user) => {
+              if (!user) {
+                window.location.href = 'index.html';
+                return;
+              }
+
+              // Check if user is organizer
+              const userDoc = await firebase.firestore().collection('users').doc(user.uid).get();
+              const userData = userDoc.data();
+              
+              if (!userData || (!userData.isOrganizer && userData.role !== 'admin' && userData.role !== 'superAdmin')) {
+                window.location.href = 'index.html';
+                return;
+              }
+              
+              resolve();
+            });
+          });
+        } catch (error) {
+          console.error('Security check failed:', error);
+          window.location.href = 'index.html';
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="nav-logo">
+          <div class="logo"></div>
+          <span class="logo-text">PES ARENA</span>
+        </div>
+
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <a href="index.html" class="nav-link">Home</a>
+          </li>
+          <li class="nav-item">
+            <a href="about.html" class="nav-link">About</a>
+          </li>
+          <li class="nav-item">
+            <a href="tournaments.html" class="nav-link">Tournaments</a>
+          </li>
+          <li class="nav-item">
+            <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+          </li>
+          <li class="nav-item">
+            <a href="blog.html" class="nav-link">News</a>
+          </li>
+          <li class="nav-item">
+            <a href="community.html" class="nav-link">Community</a>
+          </li>
+          <li class="nav-item" id="nav-management" style="display:block;">
+            <a href="management.html" class="nav-link active">
+              <span style="color: #00ff88;">⚙️</span> My Tournaments
+            </a>
+          </li>
+          <li class="nav-item" id="nav-boardroom" style="display:none;">
+            <a href="boardroom.html" class="nav-link">
+              <span style="color: #00ff88;">🛡️</span> Board Room
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="profile.html" class="nav-link">My Profile</a>
+          </li>
+        </ul>
+
+        <div class="nav-actions">
+          <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode">
+            <span class="toggle-icon">🌙</span>
+          </button>
+          <div class="hamburger" id="hamburger">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container" style="margin-top: 100px; margin-bottom: 50px;">
+      <!-- Header -->
+      <div class="management-header">
+        <h1>🎮 My Managed Arenas</h1>
+        <a href="create-tournament.html" class="create-tournament-btn">
+          + Create New Tournament
+        </a>
+      </div>
+
+      <!-- Tournament List -->
+      <div id="my-tournaments-list">
+        <div class="loading-spinner">
+          <div class="spinner"></div>
+          <p>Loading your tournaments...</p>
+        </div>
+      </div>
+
+      <!-- Management Tools (Hidden until tournament selected) -->
+      <div id="management-tools" class="management-tools">
+        <div class="tools-header">
+          <h2 id="selected-tournament-title">Tournament Management</h2>
+          <span id="selected-tournament-status" class="selected-tournament-badge">Status: --</span>
+        </div>
+
+        <!-- Player List -->
+        <div class="players-table-container">
+          <h3 style="color: #00ff88; margin-bottom: 15px;">👥 Registered Players</h3>
+          <div id="players-list-container">
+            <table class="players-table">
+              <thead>
+                <tr>
+                  <th>Player</th>
+                  <th>Gamer Tag</th>
+                  <th>Status</th>
+                  <th>Registered</th>
+                </tr>
+              </thead>
+              <tbody id="players-table-body">
+                <tr>
+                  <td colspan="4" style="text-align: center; color: var(--text-secondary);">
+                    Select a tournament to view players
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- WhatsApp Link Editor -->
+        <div class="whatsapp-editor">
+          <label>📱 Tournament WhatsApp Group</label>
+          <div class="whatsapp-input-group">
+            <input type="url" id="whatsapp-link-input" placeholder="https://chat.whatsapp.com/..." />
+            <button id="update-whatsapp-btn">Update Link</button>
+          </div>
+          <div id="current-whatsapp-link" class="current-link">
+            Current link: Not set
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+          <button id="generate-fixtures-btn" class="action-btn btn-primary">
+            🔄 Generate Fixtures
+          </button>
+          <button id="mark-finished-btn" class="action-btn btn-warning">
+            🏁 Mark as Finished
+          </button>
+          <button id="export-players-btn" class="action-btn btn-success">
+            📊 Export Players
+          </button>
+        </div>
+
+        <!-- Broadcast Section -->
+        <div class="broadcast-section">
+          <h3>📢 Send Broadcast Notification</h3>
+          <div class="broadcast-input-group">
+            <textarea id="broadcast-message" placeholder="Type your message to all participants..."></textarea>
+            <button id="send-broadcast-btn">Send to All Players</button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-notification" class="toast-notification">
+      <div class="toast-content">
+        <span class="toast-icon">✓</span>
+        <span class="toast-message" id="toast-message">Notification</span>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <div class="footer-logo">
+              <div class="logo"></div>
+              <span class="logo-text">PES ARENA</span>
+            </div>
+            <p class="footer-description">
+              PES ARENA is Kenya's premier competitive eFootball platform, promoting digital gaming excellence and national competition through the PES ARENA ecosystem.
+            </p>
+          </div>
+          <div class="footer-section">
+            <h3>Quick Links</h3>
+            <ul class="footer-links">
+              <li><a href="index.html">Home</a></li>
+              <li><a href="tournaments.html">Tournaments</a></li>
+              <li><a href="leaderboard.html">Leaderboard</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2025 PES ARENA – National eSports Infrastructure.</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-functions-compat.js"></script>
+
+    <script src="js/firebase-config.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/management.js"></script>
+  </body>
+</html>

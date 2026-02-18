@@ -7,6 +7,142 @@ class HomeManager {
     init() {
         this.loadHomePageData(); // Consolidated loading
         this.setupPWAInstallPrompt();
+        this.setupAuthListener(); // Auth listener for role-based UI
+    }
+
+    // Authentication listener with role-based UI updates
+    setupAuthListener() {
+        firebase.auth().onAuthStateChanged(async (user) => {
+            if (user) {
+                try {
+                    // Fetch user profile from Firestore
+                    const userDoc = await this.db.collection('users').doc(user.uid).get();
+                    
+                    if (userDoc.exists) {
+                        const userData = userDoc.data();
+                        console.log('User role data:', { 
+                            role: userData.role, 
+                            isOrganizer: userData.isOrganizer 
+                        });
+                        
+                        // Update UI based on role
+                        this.updateUIForUserRole(userData);
+                        
+                        // Update tournament creation button if it exists
+                        this.updateTournamentButton(userData);
+                    }
+                } catch (error) {
+                    console.error('Error fetching user role:', error);
+                }
+            } else {
+                // User is signed out - hide all role-specific elements
+                this.hideAllRoleElements();
+            }
+        });
+    }
+
+    // Update UI based on user role
+    updateUIForUserRole(userData) {
+        const navManagement = document.getElementById('nav-management');
+        const navBoardroom = document.getElementById('nav-boardroom');
+        const organizerCard = document.getElementById('organizer-card');
+        const adminHubCard = document.getElementById('admin-hub-card');
+
+        // First, hide all role-specific elements
+        this.hideAllRoleElements();
+
+        // Check for Super Admin (full access)
+        if (userData.role === 'superAdmin') {
+            console.log('Super Admin detected - showing all management features');
+            
+            if (navManagement) navManagement.style.display = 'block';
+            if (navBoardroom) navBoardroom.style.display = 'block';
+            if (organizerCard) organizerCard.style.display = 'block';
+            if (adminHubCard) adminHubCard.style.display = 'block';
+            
+            // Add super admin badge to admin card
+            if (adminHubCard) {
+                const badge = adminHubCard.querySelector('.card-badge');
+                if (badge) badge.textContent = 'Super Administrator';
+            }
+        }
+        // Check for Organizer
+        else if (userData.isOrganizer === true) {
+            console.log('Organizer detected - showing tournament management');
+            
+            if (navManagement) navManagement.style.display = 'block';
+            if (organizerCard) organizerCard.style.display = 'block';
+            
+            // UPDATED: Organizers also get Board Room access
+            if (navBoardroom) {
+                navBoardroom.style.display = 'block';
+                console.log('Board Room access granted to Organizer');
+            }
+        }
+        // Check for Moderator
+        else if (userData.role === 'moderator') {
+            console.log('Moderator detected - showing board room access');
+            
+            // UPDATED: Moderators get Board Room access
+            if (navBoardroom) {
+                navBoardroom.style.display = 'block';
+                console.log('Board Room access granted to Moderator');
+            }
+        }
+
+        // Special case: Admins (if you have an 'admin' role that's not superAdmin)
+        if (userData.role === 'admin') {
+            console.log('Admin detected - showing all management features');
+            
+            if (navManagement) navManagement.style.display = 'block';
+            if (navBoardroom) navBoardroom.style.display = 'block';
+            if (organizerCard) organizerCard.style.display = 'block';
+            if (adminHubCard) adminHubCard.style.display = 'block';
+        }
+
+        // UPDATED: Additional check for any user with boardroom access flag
+        if (userData.hasBoardroomAccess === true) {
+            console.log('Custom boardroom access granted');
+            if (navBoardroom) navBoardroom.style.display = 'block';
+        }
+    }
+
+    // Hide all role-specific elements
+    hideAllRoleElements() {
+        const elements = [
+            'nav-management',
+            'nav-boardroom',
+            'organizer-card',
+            'admin-hub-card'
+        ];
+
+        elements.forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.style.display = 'none';
+            }
+        });
+    }
+
+    // Update tournament creation button for organizers
+    updateTournamentButton(userData) {
+        // Look for tournament creation button on tournaments page
+        const createTournamentBtn = document.querySelector('.create-tournament-btn');
+        const organizeButtons = document.querySelectorAll('.btn-organize, [href*="create-tournament"]');
+        
+        if (userData.isOrganizer === true || userData.role === 'admin' || userData.role === 'superAdmin') {
+            // Update text for organizer
+            if (createTournamentBtn) {
+                createTournamentBtn.textContent = '📋 Organize New Arena';
+                createTournamentBtn.classList.add('organizer-btn');
+            }
+            
+            // Update any organize buttons
+            organizeButtons.forEach(btn => {
+                btn.textContent = '📋 Organize New Arena';
+                btn.classList.add('organizer-btn');
+            });
+        }
     }
 
     async loadHomePageData() {
@@ -50,7 +186,7 @@ class HomeManager {
         }
     }
 
-    // UPDATED METHOD: Load Match of the Day using new Firebase method
+    // Load Match of the Day using new Firebase method
     async loadMatchOfTheDay() {
         const container = document.getElementById('match-of-the-day-content');
         if (!container) {
@@ -66,7 +202,7 @@ class HomeManager {
         }
     }
 
-    // UPDATED METHOD: Render Featured Match
+    // Render Featured Match
     renderFeaturedMatch(match) {
         const container = document.getElementById('match-of-the-day-content');
         if(!match || !container) return;
@@ -114,7 +250,7 @@ class HomeManager {
         `;
     }
 
-    // UPDATED METHOD: Load Top Attackers with professional header
+    // Load Top Attackers with professional header
     async loadTopAttackers() {
         const container = document.getElementById('best-attack-container');
         if (!container) {
@@ -146,7 +282,7 @@ class HomeManager {
         }
     }
 
-    // UPDATED METHOD: Load Top Defenders with professional header
+    // Load Top Defenders with professional header
     async loadTopDefenders() {
         const container = document.getElementById('best-defense-container');
         if (!container) {
@@ -178,7 +314,7 @@ class HomeManager {
         }
     }
 
-    // UPDATED METHOD: Show No Featured Match
+    // Show No Featured Match
     showNoFeaturedMatch() {
         const container = document.getElementById('match-of-the-day-content');
         if (container) {
@@ -253,7 +389,7 @@ class HomeManager {
         setTimeout(() => element.classList.remove('updated'), 500);
     }
 
-    // UPDATED METHOD: Load Recent Matches (excluding Match of the Day)
+    // Load Recent Matches (excluding Match of the Day)
     async loadRecentMatches(matchesSnapshot) {
         try {
             // If we don't have a snapshot, fetch from Firebase
@@ -503,7 +639,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 30000);
 });
 
-// Optional: Add CSS for animations
+// Optional: Add CSS for animations and role-based styling
 const style = document.createElement('style');
 style.textContent = `
     .stat-number.updated {
@@ -595,7 +731,7 @@ style.textContent = `
         color: #ff6b6b;
     }
     
-    /* NEW: Professional ranking header styles */
+    /* Professional ranking header styles */
     .ranking-header {
         display: flex;
         justify-content: space-between;
@@ -611,6 +747,20 @@ style.textContent = `
     .ranking-item .stat-value {
         font-family: 'Orbitron', sans-serif;
         color: var(--primary-green);
+    }
+
+    /* Organizer button styling */
+    .organizer-btn {
+        background: linear-gradient(135deg, #00ff88 0%, #00cc6a 100%);
+        color: #1a1a2e;
+        font-weight: bold;
+        border: none;
+        box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+    }
+
+    .organizer-btn:hover {
+        box-shadow: 0 0 30px rgba(0, 255, 136, 0.5);
+        transform: translateY(-2px);
     }
 `;
 document.head.appendChild(style);

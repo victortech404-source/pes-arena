@@ -12,6 +12,24 @@
       ]
     }
   ],
+  "hosting": {
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "/api/**",
+        "function": "mpesaStkPush"
+      },
+      {
+        "source": "!/@(js|css|images|icons|admin.html|profile.html|tournaments.html)/**",
+        "destination": "/index.html"
+      }
+    ]
+  },
   "firestore": {
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
