@@ -4,24 +4,24 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
-    <!-- Empty favicon to prevent console errors -->
+    <!-- Empty favicon -->
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
     
     <!-- Primary Meta Tags -->
-    <title>Leaderboard & Campus Legends - UON GRiD</title>
+    <title>Leaderboard & Legends - PES ARENA</title>
     <meta
       name="title"
-      content="Leaderboard & Campus Legends - UON GRiD"
+      content="Leaderboard & Legends - PES ARENA"
     />
     <meta
       name="description"
-      content="View tournament results, rankings, and explore the Campus Legends Directory of University of Nairobi eFootball players."
+      content="View tournament results, rankings, and explore the Legends Directory of University of Nairobi eFootball players with Chiromo Mode analytics."
     />
     <meta
       name="keywords"
-      content="UON GRiD leaderboard, campus legends, UON eFootball rankings, player directory, tournament results"
+      content="PES ARENA leaderboard, campus legends, UON eFootball rankings, player directory, tournament results, Chiromo Mode"
     />
-    <meta name="author" content="UON GRiD" />
+    <meta name="author" content="PES ARENA" />
     <meta name="robots" content="index, follow" />
 
     <!-- CSS -->
@@ -43,7 +43,7 @@
       <div class="nav-container">
         <div class="nav-logo">
           <div class="logo"></div>
-          <span class="logo-text">UON GRiD</span>
+          <span class="logo-text">PES ARENA</span>
         </div>
 
         <ul class="nav-menu">
@@ -66,7 +66,7 @@
             <a href="community.html" class="nav-link">Community</a>
           </li>
           <li class="nav-item" id="nav-join-hub">
-            <a href="join.html" class="nav-link join-btn">Join Hub</a>
+            <a href="join.html" class="nav-link join-btn">Join Arena</a>
           </li>
           <li class="nav-item">
             <a href="profile.html" class="nav-link">My Profile</a>
@@ -94,12 +94,12 @@
       <div class="hero-content">
         <h1 class="hero-title">Results & Legends Directory</h1>
         <p class="hero-description">
-          View tournament results and explore the Campus Legends Directory.
+          View tournament results and explore the PES ARENA Legends Directory with advanced Chiromo Mode analytics.
         </p>
       </div>
     </section>
 
-    <!-- Tournament Results Section (MOVED TO TOP) -->
+    <!-- Tournament Results Section -->
     <section class="tournament-results-section">
       <div class="container">
         <div id="leaderboard-list-view">
@@ -147,12 +147,29 @@
       </div>
     </section>
 
-    <!-- Campus Legends Directory Section (MOVED TO FOLLOW) -->
+    <!-- Legends Directory Section -->
     <section class="legends-directory-section">
       <div class="container">
         <div class="section-header">
-          <h2 class="section-title">🏆 Campus Legends Directory</h2>
-          <p class="section-subtitle">Discover and connect with top players from University of Nairobi</p>
+          <h2 class="section-title">🏆 Legends Directory</h2>
+          <p class="section-subtitle">Discover and connect with top players featuring Chiromo Mode advanced stats</p>
+        </div>
+
+        <!-- Controls Bar -->
+        <div class="controls-bar">
+          <div class="sort-controls">
+            <label for="sort-leaderboard">Sort by:</label>
+            <select id="sort-leaderboard" class="sort-select">
+              <option value="points">Points</option>
+              <option value="reliability">Reliability (RLB)</option>
+              <option value="consistency">Consistency (Current Form)</option>
+              <option value="efficiency">Goal Efficiency</option>
+            </select>
+          </div>
+          
+          <button id="chiromo-mode-toggle" class="chiromo-toggle active">
+            Chiromo Mode: On
+          </button>
         </div>
 
         <!-- Search Bar -->
@@ -178,20 +195,18 @@
           <p class="filters-subtitle">Click a tournament to view its participants</p>
           
           <div class="tournament-filters-buttons" id="tournament-filters-buttons">
-            <!-- All Players button (active by default) -->
             <button class="tournament-filter-btn active" data-tournament="all">
               All Players
               <span class="player-count-badge" id="all-players-count">0</span>
             </button>
             
-            <!-- Tournament buttons will be dynamically added here -->
             <div class="loading-spinner small" style="margin: 10px auto;"></div>
           </div>
         </div>
 
         <!-- Main Display Area -->
         <div class="legends-display-area">
-          <!-- Players Grid -->
+          <!-- Players Table -->
           <div id="legends-list-container" class="legends-grid">
             <div class="skeleton-loader" style="height: 300px;"></div>
             <div class="skeleton-loader" style="height: 300px;"></div>
@@ -199,7 +214,7 @@
             <div class="skeleton-loader" style="height: 300px;"></div>
           </div>
 
-          <!-- No Results Message (Hidden by default) -->
+          <!-- No Results Message -->
           <div id="no-results-message" class="no-results-message" style="display: none;">
             <div class="no-results-icon">😕</div>
             <h3>No players found</h3>
@@ -216,7 +231,7 @@
       </div>
     </section>
 
-    <!-- Player Stats Modal (Will be populated by JavaScript) -->
+    <!-- Player Stats Modal -->
     <div id="player-stats-modal" class="modal-overlay" style="display: none;">
       <div class="modal-content">
         <div class="modal-header">
@@ -224,7 +239,7 @@
           <button class="modal-close" onclick="hidePlayerStatsModal()">×</button>
         </div>
         <div class="modal-body" id="modal-player-stats">
-          <!-- Will be populated by JavaScript -->
+          <!-- Populated by JavaScript -->
         </div>
       </div>
     </div>
@@ -235,12 +250,11 @@
           <div class="footer-section">
             <div class="footer-logo">
               <div class="logo"></div>
-              <span class="logo-text">UON GRiD</span>
+              <span class="logo-text">PES ARENA</span>
             </div>
             <p class="footer-description">
               The official online platform for University of Nairobi's eFootball
-              community. Promoting digital gaming excellence and community
-              interaction.
+              community. Promoting digital gaming excellence with advanced Chiromo Mode analytics.
             </p>
             <div class="social-links">
               <a href="#" class="social-link" aria-label="Instagram">📷</a>
@@ -265,7 +279,7 @@
               <li><a href="tournaments.html">Tournaments</a></li>
               <li><a href="leaderboard.html">Leaderboard</a></li>
               <li><a href="blog.html">News & Blog</a></li>
-              <li><a href="join.html">Join Hub</a></li>
+              <li><a href="join.html">Join Arena</a></li>
               <li><a href="contact.html">Contact</a></li>
             </ul>
           </div>
@@ -295,8 +309,8 @@
 
         <div class="footer-bottom">
           <p>
-            &copy; 2025 UON GRiD – Powered by the University of Nairobi eSports
-            Community.
+            &copy; 2025 PES ARENA – Powered by the University of Nairobi eSports
+            Community with Chiromo Mode analytics.
           </p>
         </div>
       </div>
@@ -307,49 +321,11 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-analytics-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-analytics-compat.js"></script>
 
     <script src="js/firebase-config.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/analytics.js"></script>
     <script src="js/leaderboard.js"></script>
-    <script>
-      // Add this JavaScript to handle the tournament filtering functionality
-      document.addEventListener('DOMContentLoaded', function() {
-        // This will be populated by the main leaderboard.js
-        // But we'll add the basic structure here
-        
-        // Tournament filter functionality
-        function setupTournamentFilters() {
-          const filterButtons = document.querySelectorAll('.tournament-filter-btn');
-          filterButtons.forEach(button => {
-            button.addEventListener('click', function() {
-              // Remove active class from all buttons
-              filterButtons.forEach(btn => btn.classList.remove('active'));
-              
-              // Add active class to clicked button
-              this.classList.add('active');
-              
-              // Get tournament ID
-              const tournamentId = this.getAttribute('data-tournament');
-              
-              // Filter players based on tournament
-              filterPlayersByTournament(tournamentId);
-            });
-          });
-        }
-        
-        function filterPlayersByTournament(tournamentId) {
-          // This function will be implemented in leaderboard.js
-          // It will show/hide players based on tournament selection
-          console.log('Filtering by tournament:', tournamentId);
-          
-          // If tournamentId is 'all', show all players
-          // Otherwise, only show players who participated in that tournament
-        }
-        
-        // Initialize when DOM is loaded
-        setupTournamentFilters();
-      });
-    </script>
   </body>
 </html>
